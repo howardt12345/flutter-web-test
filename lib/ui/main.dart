@@ -102,9 +102,6 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
         child: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey
-              ),
               child: widget.pages[selectedBarIndex],
             ),
             Material(
