@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_web_test/utils/functions.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -7,6 +8,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   AnimationController _controller;
+
+  double _screenSize = 0;
+
 
   @override
   void initState() {
@@ -22,6 +26,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    setState(() => _screenSize = screenWidth(context: context));
+
+
+    return OrientationBuilder(
+      builder: (context, orientation) => Scaffold(
+        appBar: AppBar(
+          title: Center(
+            child: Text("Test"),
+          ),
+        ),
+        body: Container(
+          child: Text("Hello, web!"),
+        ),
+      ),
+    );
   }
 }
