@@ -37,7 +37,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ),
         body: Container(
-          child: Text("Hello, web!"),
+          child: Center(
+            child: Text("Hello, web!"),
+          ),
         ),
       ),
     );
