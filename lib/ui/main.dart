@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:flutter_swiper/flutter_swiper.dart';
 
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/ui/pages/portfolio.dart';
