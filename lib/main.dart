@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'howardt12345',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: "Roboto"
       ),
       home: Home(),
     );
