@@ -1,1 +1,1 @@
-robocopy "%CD%"\build\web "%CD%"\docs
+robocopy "%CD%"\build\web "%CD%"
