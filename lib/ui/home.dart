@@ -63,29 +63,35 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _buildVerticalLayout() {
     return Scaffold(
-
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 8.0,
+              decoration: BoxDecoration(
+                  color: Colors.grey
               ),
-              child: AnimatedTabBar(
-                barItems: widget.barItems,
-                animationDuration: const Duration(milliseconds: 150),
-                barStyle: BarStyle(fontSize: 16.0, iconSize: 20.0),
-                onBarTap: (index) {
-                  setState(() {
-                    selectedBarIndex = index;
-                  });
-                }
+              child: Center(
+                child: Text("Hello, web! $selectedBarIndex"),
               ),
             ),
-            Center(
-              child: Text("Hello, web! $selectedBarIndex"),
-            ),
+            Material(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 8.0,
+                ),
+                child: AnimatedTabBar(
+                    barItems: widget.barItems,
+                    animationDuration: const Duration(milliseconds: 150),
+                    barStyle: BarStyle(fontSize: 16.0, iconSize: 20.0),
+                    onBarTap: (index) {
+                      setState(() {
+                        selectedBarIndex = index;
+                      });
+                    }
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -94,14 +100,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _buildHorizontalLayout() {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text("Test"),
-        ),
-      ),
-      body: Container(
-        child: Center(
-          child: Text("Hello, web!"),
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey
+              ),
+              child: Center(
+                child: Text("Hello, web! $selectedBarIndex"),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                  width: 400,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60)),
+                    color: Colors.white,
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 40.0,
+                      right: 8.0,
+                      top: 8.0,
+                      bottom: 8.0,
+                    ),
+                    child: AnimatedTabBar(
+                        barItems: widget.barItems,
+                        animationDuration: const Duration(milliseconds: 150),
+                        barStyle: BarStyle(fontSize: 16.0, iconSize: 24.0),
+                        onBarTap: (index) {
+                          setState(() {
+                            selectedBarIndex = index;
+                          });
+                        }
+                    ),
+                  ),
+              ),
+            ),
+          ],
         ),
       ),
     );

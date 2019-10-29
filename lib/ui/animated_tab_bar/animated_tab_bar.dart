@@ -50,10 +50,13 @@ class _AnimatedTabBarState extends State<AnimatedTabBar>
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           duration: widget.animationDuration,
           decoration: BoxDecoration(
-              color: isSelected
-                  ? item.color.withOpacity(0.15)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.all(Radius.circular(30))),
+            color: isSelected
+                ? item.color.withOpacity(0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.all(
+                Radius.circular(30)
+            )
+          ),
           child: Row(
             children: <Widget>[
               Icon(
@@ -73,7 +76,8 @@ class _AnimatedTabBarState extends State<AnimatedTabBar>
                   style: TextStyle(
                       color: item.color,
                       fontWeight: widget.barStyle.fontWeight,
-                      fontSize: widget.barStyle.fontSize),
+                      fontSize: widget.barStyle.fontSize
+                  ),
                 ),
               )
             ],
