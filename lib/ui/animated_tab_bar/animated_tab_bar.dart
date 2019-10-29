@@ -5,12 +5,14 @@ class AnimatedTabBar extends StatefulWidget {
   final Duration animationDuration;
   final Function onBarTap;
   final BarStyle barStyle;
+  int startingIndex = 0;
 
   AnimatedTabBar({
     this.barItems,
     this.animationDuration = const Duration(milliseconds: 500),
     this.onBarTap,
     this.barStyle,
+    this.startingIndex,
   });
 
   @override
@@ -20,6 +22,14 @@ class AnimatedTabBar extends StatefulWidget {
 class _AnimatedTabBarState extends State<AnimatedTabBar>
     with TickerProviderStateMixin {
   int selectedBarIndex = 0;
+
+  @override
+  void initState() {
+    setState(() {
+      selectedBarIndex = widget.startingIndex;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
