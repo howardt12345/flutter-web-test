@@ -1,9 +1,13 @@
 import "package:flutter/material.dart";
+import 'package:flutter_swiper/flutter_swiper.dart';
+
+import 'package:flutter_web_test/ui/pages/home.dart';
+import 'package:flutter_web_test/ui/pages/portfolio.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'animated_tab_bar/animated_tab_bar.dart';
 
-class Home extends StatefulWidget {
+class Main extends StatefulWidget {
   final List<BarItem> barItems = [
     BarItem(
       text: "Home",
@@ -11,27 +15,47 @@ class Home extends StatefulWidget {
       color: Colors.indigo,
     ),
     BarItem(
-      text: "Portfolio",
-      iconData: Icons.camera_alt,
+      text: "About",
+      iconData: Icons.person,
       color: Colors.pinkAccent,
     ),
     BarItem(
-      text: "Projects",
+      text: "Portfolio",
       iconData: Icons.folder_open,
       color: Colors.yellow.shade900,
     ),
     BarItem(
-      text: "About",
-      iconData: Icons.person_outline,
+      text: "Contact",
+      iconData: Icons.email,
       color: Colors.teal,
+    ),
+  ];
+  final List<Widget> pages = [
+    HomePage(),
+    Container(
+      decoration: BoxDecoration(
+        color: Colors.pinkAccent,
+      ),
+      child: Center(
+        child: Text("Page 2"),
+      ),
+    ),
+    PortfolioPage(),
+    Container(
+      decoration: BoxDecoration(
+        color: Colors.teal,
+      ),
+      child: Center(
+        child: Text("Page 4"),
+      ),
     ),
   ];
 
   @override
-  _HomeState createState() => _HomeState();
+  _MainState createState() => _MainState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _MainState extends State<Main> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   double _screenSize = 0;
@@ -61,6 +85,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
+  _buildTabBar(index) => AnimatedTabBar(
+    startingIndex: index,
+    barItems: widget.barItems,
+    animationDuration: const Duration(milliseconds: 150),
+    barStyle: BarStyle(fontSize: 16.0, iconSize: 24.0),
+    onBarTap: (index) {
+      setState(() {
+        selectedBarIndex = index;
+      });
+    }
+  );
+
   _buildVerticalLayout() {
     return Scaffold(
       body: SafeArea(
@@ -70,9 +106,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               decoration: BoxDecoration(
                   color: Colors.grey
               ),
-              child: Center(
-                child: Text("Hello, web! $selectedBarIndex"),
-              ),
+              child: widget.pages[selectedBarIndex],
             ),
             Material(
               child: Container(
@@ -80,16 +114,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   vertical: 8.0,
                   horizontal: 8.0,
                 ),
-                child: AnimatedTabBar(
-                    barItems: widget.barItems,
-                    animationDuration: const Duration(milliseconds: 150),
-                    barStyle: BarStyle(fontSize: 16.0, iconSize: 20.0),
-                    onBarTap: (index) {
-                      setState(() {
-                        selectedBarIndex = index;
-                      });
-                    }
-                ),
+                child: _buildTabBar(selectedBarIndex),
               ),
             )
           ],
@@ -104,38 +129,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         child: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey
-              ),
-              child: Center(
-                child: Text("Hello, web! $selectedBarIndex"),
-              ),
+              child: widget.pages[selectedBarIndex],
             ),
             Align(
               alignment: Alignment.topRight,
               child: Container(
-                  width: 400,
+                  width: 400 + _screenSize/16,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60)),
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                   child: Container(
                     padding: EdgeInsets.only(
                       left: 40.0,
-                      right: 8.0,
+                      right: _screenSize/16,
                       top: 8.0,
                       bottom: 8.0,
                     ),
-                    child: AnimatedTabBar(
-                        barItems: widget.barItems,
-                        animationDuration: const Duration(milliseconds: 150),
-                        barStyle: BarStyle(fontSize: 16.0, iconSize: 24.0),
-                        onBarTap: (index) {
-                          setState(() {
-                            selectedBarIndex = index;
-                          });
-                        }
-                    ),
+                    child: _buildTabBar(selectedBarIndex),
                   ),
               ),
             ),
