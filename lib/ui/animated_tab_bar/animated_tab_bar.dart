@@ -24,19 +24,11 @@ class _AnimatedTabBarState extends State<AnimatedTabBar>
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 10.0,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 32.0,
-          top: 16.0,
-          left: 16.0,
-          right: 16.0,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _buildBarItems(),
-        ),
+      elevation: 0,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: _buildBarItems(),
       ),
     );
   }

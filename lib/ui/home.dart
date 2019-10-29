@@ -63,22 +63,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _buildVerticalLayout() {
     return Scaffold(
-      appBar: PreferredSize(
-        child: AnimatedTabBar(
-          barItems: widget.barItems,
-          animationDuration: const Duration(milliseconds: 150),
-          barStyle: BarStyle(fontSize: 20.0, iconSize: 30.0),
-          onBarTap: (index) {
-            setState(() {
-              selectedBarIndex = index;
-            });
-          },
-        ),
-        preferredSize: new Size.fromHeight(56.0)
-      ),
-      body: Container(
-        child: Center(
-          child: Text("Hello, web! $selectedBarIndex"),
+
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 8.0,
+              ),
+              child: AnimatedTabBar(
+                barItems: widget.barItems,
+                animationDuration: const Duration(milliseconds: 150),
+                barStyle: BarStyle(fontSize: 16.0, iconSize: 20.0),
+                onBarTap: (index) {
+                  setState(() {
+                    selectedBarIndex = index;
+                  });
+                }
+              ),
+            ),
+            Center(
+              child: Text("Hello, web! $selectedBarIndex"),
+            ),
+          ],
         ),
       ),
     );
