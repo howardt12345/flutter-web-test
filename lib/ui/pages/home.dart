@@ -12,8 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
-  bool _portrait = false;
-
   double _screenSize = 0;
 
   @override
@@ -62,7 +60,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     text: TextSpan(
       text: "An Engineer, Flutter Developer, and Photographer",
       style: Theme.of(context).textTheme.title.copyWith(
-          fontSize: isPortrait ? 15 : 21
+          fontSize: isPortrait ? 14 : 19
       ),
     ),
   );
@@ -76,7 +74,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         onPressed: () =>
             html.window.open(
-                "https://www.facebook.com/howardt12345photo/",
+                "https://www.facebook.com/howardt12345page",
                 "Facebook"),
       ),
       IconButton(
