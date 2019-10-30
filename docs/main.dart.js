@@ -32217,16 +32217,16 @@ $0:function(){return this.a.f=F.bH(this.b,!1).a.a},
 $S:15}
 Y.H3.prototype={
 $2:function(a,b){var u=null,t=this.a,s=b!==C.ho,r=!s||t.f<=600,q=K.aW(t.c).y2
-r=r?48:72
+r=r?46:64
 r=T.C9(u,u,C.bw,!0,u,Q.oD(u,q.f.t0(r),"Hi, I'm Howard!"),C.ae,u,1,C.b1)
 s=!s||t.f<=600
 q=K.aW(t.c).y2
-s=s?16:23
+s=s?15:21
 return M.c1(u,new T.dJ(C.L,u,u,new T.uc(C.W,C.ez,C.cW,C.bF,u,C.d3,u,H.b([r,T.C9(u,u,C.bw,!0,u,Q.oD(u,q.f.t0(s),"An Engineer, Flutter Developer, and Photographer"),C.ae,u,1,C.b1),t.xU()],[N.b1]),u),u),u,u,u,u,u,u,u,u)},
 $C:"$2",
 $R:2}
 Y.GZ.prototype={
-$0:function(){return C.V.kd(window,"https://www.facebook.com/howardt12345","Facebook")},
+$0:function(){return C.V.kd(window,"https://www.facebook.com/howardt12345photo/","Facebook")},
 $C:"$0",
 $R:0,
 $S:19}

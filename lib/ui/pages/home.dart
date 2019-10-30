@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     text: TextSpan(
       text: "Hi, I'm Howard!",
       style: Theme.of(context).textTheme.title.copyWith(
-          fontSize: isPortrait ? 48 : 72
+          fontSize: isPortrait ? 46 : 64
       ),
     ),
   );
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     text: TextSpan(
       text: "An Engineer, Flutter Developer, and Photographer",
       style: Theme.of(context).textTheme.title.copyWith(
-          fontSize: isPortrait ? 16 : 23
+          fontSize: isPortrait ? 15 : 21
       ),
     ),
   );
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         onPressed: () =>
             html.window.open(
-                "https://www.facebook.com/howardt12345",
+                "https://www.facebook.com/howardt12345photo/",
                 "Facebook"),
       ),
       IconButton(
