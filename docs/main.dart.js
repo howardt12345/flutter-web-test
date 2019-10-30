@@ -32203,17 +32203,17 @@ $C:"$0",
 $R:0,
 $S:18}
 Y.H_.prototype={
-$0:function(){return C.V.kc(window,"https://www.instagram.com/howardt12345","Facebook")},
+$0:function(){return C.V.kc(window,"https://www.instagram.com/howardt12345","Instagram")},
 $C:"$0",
 $R:0,
 $S:18}
 Y.H0.prototype={
-$0:function(){return C.V.kc(window,"https://www.github.com/howardt12345","Facebook")},
+$0:function(){return C.V.kc(window,"https://www.github.com/howardt12345","Github")},
 $C:"$0",
 $R:0,
 $S:18}
 Y.H1.prototype={
-$0:function(){return C.V.kc(window,"https://www.linkedin.com/in/howardt12345","Facebook")},
+$0:function(){return C.V.kc(window,"https://www.linkedin.com/in/howardt12345","Linkedin")},
 $C:"$0",
 $R:0,
 $S:18}

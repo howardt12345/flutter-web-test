@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/utils/custom_icons.dart';
-import 'package:flutter_web_test/utils/functions.dart';
 import 'dart:html' as html;
 
 class HomePage extends StatefulWidget {
@@ -60,19 +59,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   icon: Icon(
                       CustomIcons.instagram
                   ),
-                  onPressed: () => html.window.open("https://www.instagram.com/howardt12345", "Facebook"),
+                  onPressed: () => html.window.open("https://www.instagram.com/howardt12345", "Instagram"),
                 ),
                 IconButton(
                   icon: Icon(
                       CustomIcons.github_circled
                   ),
-                  onPressed: () => html.window.open("https://www.github.com/howardt12345", "Facebook"),
+                  onPressed: () => html.window.open("https://www.github.com/howardt12345", "Github"),
                 ),
                 IconButton(
                   icon: Icon(
                       CustomIcons.linkedin_squared
                   ),
-                  onPressed: () => html.window.open("https://www.linkedin.com/in/howardt12345", "Facebook"),
+                  onPressed: () => html.window.open("https://www.linkedin.com/in/howardt12345", "Linkedin"),
                 ),
               ],
             )
