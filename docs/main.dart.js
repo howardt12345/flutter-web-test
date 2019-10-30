@@ -32225,7 +32225,7 @@ r=r?46:64
 r=T.Ca(u,u,C.bw,!0,u,Q.oE(u,q.f.t0(r),"Hi, I'm Howard!"),C.ae,u,1,C.b1)
 s=!s||t.e<=600
 q=K.aW(t.c).y2
-s=s?14:19
+s=s?14:20
 return M.bL(u,new T.d2(C.F,u,u,new T.ud(C.W,C.ez,C.cW,C.bF,u,C.d3,u,H.b([r,T.Ca(u,u,C.bw,!0,u,Q.oE(u,q.f.t0(s),"An Engineer, Flutter Developer, and Photographer"),C.ae,u,1,C.b1),t.xU()],[N.b1]),u),u),u,u,u,u,u,u,u,u)},
 $C:"$2",
 $R:2}

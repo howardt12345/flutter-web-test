@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     text: TextSpan(
       text: "An Engineer, Flutter Developer, and Photographer",
       style: Theme.of(context).textTheme.title.copyWith(
-          fontSize: isPortrait ? 14 : 19
+          fontSize: isPortrait ? 14 : 20
       ),
     ),
   );
