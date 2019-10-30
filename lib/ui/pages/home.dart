@@ -3,6 +3,7 @@ import 'package:flutter_web_test/utils/custom_icons.dart';
 import 'dart:html' as html;
 
 import 'package:flutter_web_test/utils/functions.dart';
+import 'package:flutter_web_test/utils/list_animation.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,12 +12,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  ListAnimation _listAnimation;
 
-  double _screenSize = 0;
+  double _screenSize = 0, _offset = -10;
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    _controller = new AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _listAnimation = new ListAnimation(
+      controller: _controller,
+      items: 3,
+    );
+    _controller.forward();
     super.initState();
   }
 
@@ -25,29 +35,64 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     _controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     setState(() => _screenSize = screenWidth(context: context));
 
+    return AnimatedBuilder(
+      builder: _buildPage,
+      animation: _controller,
+    );
+  }
+
+  Widget _buildPage(BuildContext context, Widget child) {
     return OrientationBuilder(
-      builder: (context, orientation) {
-        return Container(
-          child: Center(
+      builder: (context, orientation) => Stack(
+        children: <Widget>[
+          Opacity(
+            opacity: _listAnimation.animations.map((a) => a.value * 1 / 3).fold(0, (p, c) => p + c),
+            child: Image.network(
+              "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=fff4c788-550a-44a9-b29c-620888231edb",
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              alignment: Alignment.center,
+            ),
+          ),
+          Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _buildTitle((orientation == Orientation.portrait || _screenSize <= 600)),
-                _buildSubtitle((orientation == Orientation.portrait || _screenSize <= 600)),
-                _buildSocialMediaButtons()
+                Transform.translate(
+                  offset: Offset(0, _offset + (-_listAnimation.animations[0].value * _offset)),
+                  child: Opacity(
+                    opacity: _listAnimation.animations[0].value,
+                    child: _buildTitle((orientation == Orientation.portrait || _screenSize <= 600)),
+                  ),
+                ),
+                Transform.translate(
+                  offset: Offset(0, _offset + (-_listAnimation.animations[1].value * _offset)),
+                  child: Opacity(
+                    opacity: _listAnimation.animations[1].value,
+                    child: _buildSubtitle((orientation == Orientation.portrait || _screenSize <= 600)),
+                  ),
+                ),
+                Transform.translate(
+                  offset: Offset(0, _offset + (-_listAnimation.animations[2].value * _offset)),
+                  child: Opacity(
+                    opacity: _listAnimation.animations[2].value,
+                    child: _buildSocialMediaButtons(),
+                  ),
+                ),
               ],
             ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
-  
+
   _buildTitle(bool isPortrait) => RichText(
     text: TextSpan(
       text: "Hi, I'm Howard!",
@@ -64,7 +109,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
     ),
   );
-  
+
   _buildSocialMediaButtons() => ButtonBar(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
