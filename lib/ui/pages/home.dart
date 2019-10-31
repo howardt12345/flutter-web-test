@@ -100,24 +100,36 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     ),
   );
 
-  _buildIconBar() => ButtonBar(
-    mainAxisSize: MainAxisSize.min,
+  _buildIconBar() => Row(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      IconBarButton(
-        iconData: CustomIcons.facebook_squared,
-        url: "https://www.facebook.com/howardt12345page",
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: IconBarButton(
+          iconData: CustomIcons.facebook_squared,
+          url: "https://www.facebook.com/howardt12345page",
+        ),
       ),
-      IconBarButton(
-        iconData: CustomIcons.instagram,
-        url: "https://www.instagram.com/howardt12345",
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: IconBarButton(
+          iconData: CustomIcons.instagram,
+          url: "https://www.instagram.com/howardt12345",
+        ),
       ),
-      IconBarButton(
-        iconData: CustomIcons.github_circled,
-        url: "https://www.github.com/howardt12345",
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: IconBarButton(
+          iconData: CustomIcons.github_circled,
+          url: "https://www.github.com/howardt12345",
+        ),
       ),
-      IconBarButton(
-        iconData: CustomIcons.linkedin_squared,
-        url: "https://www.linkedin.com/in/howardt12345",
+      Padding(
+        padding: EdgeInsets.all(12.0),
+        child: IconBarButton(
+          iconData: CustomIcons.linkedin_squared,
+          url: "https://www.linkedin.com/in/howardt12345",
+        ),
       ),
     ],
   );
