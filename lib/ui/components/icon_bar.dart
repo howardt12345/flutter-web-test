@@ -15,9 +15,7 @@ class IconBarButton extends StatefulWidget {
 }
 
 class _IconBarButtonState extends State<IconBarButton> {
-  static Color _stationaryColor = Colors.black;
-  static Color _hoverColor = Colors.grey;
-  static Color _color = _stationaryColor;
+  Color _color = Colors.black;
 
   void _onTap() {
     html.window.open(widget.url, '${Random.secure().nextInt(1000000000)}');
@@ -30,11 +28,11 @@ class _IconBarButtonState extends State<IconBarButton> {
   }
 
   void _onPointerExit(PointerExitEvent event) {
-    _changeButtonColor(_stationaryColor);
+    _changeButtonColor(Theme.of(context).textTheme.button.color);
   }
 
   void _onPointerHover(PointerHoverEvent event) {
-    _changeButtonColor(_hoverColor);
+    _changeButtonColor(Theme.of(context).buttonColor);
   }
 
   @override

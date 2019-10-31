@@ -50,6 +50,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return OrientationBuilder(
       builder: (context, orientation) => Stack(
         children: <Widget>[
+          Opacity(
+            opacity: _listAnimation.animations.map((a) => a.value * 1 / _listAnimation.animations.length).fold(0, (p, c) => p + c),
+            child: Image.network(
+              "https://raw.githubusercontent.com/howardt12345/Portfolio/master/Nature/(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?token=AEATPTFLYQIHGGLLMMVIUZK5YN6CC",
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              alignment: Alignment.center,
+            ),
+          ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
