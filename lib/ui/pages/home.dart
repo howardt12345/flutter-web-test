@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/icon_bar.dart';
 import 'package:flutter_web_test/utils/custom_icons.dart';
