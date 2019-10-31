@@ -102,8 +102,6 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
 
   Widget _buildItem(BuildContext context, String item, int index, Animation animation) {
-    TextStyle textStyle = new TextStyle(fontSize: 20);
-
     return GestureDetector(
       onTap: () {
         setState(() {
