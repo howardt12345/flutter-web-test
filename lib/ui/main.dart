@@ -4,7 +4,7 @@ import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/ui/pages/portfolio.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
-import 'animated_tab_bar/animated_tab_bar.dart';
+import 'components/animated_tab_bar.dart';
 
 class Main extends StatefulWidget {
   final List<BarItem> barItems = [

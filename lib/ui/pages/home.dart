@@ -1,6 +1,5 @@
-import 'package:firebase/firebase.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_test/ui/components/icon_bar.dart';
 import 'package:flutter_web_test/utils/custom_icons.dart';
 import 'dart:html' as html;
 
@@ -17,8 +16,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   ListAnimation _listAnimation;
 
   double _screenSize = 0, _offset = -10;
-
-  String _url = '';
 
   @override
   void initState() {
@@ -43,50 +40,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     setState(() => _screenSize = screenWidth(context: context));
-
-    return FutureBuilder(
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return Container();
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            case ConnectionState.done:
-              return AnimatedBuilder(
-                builder: (context, child) => _buildPage(context, child),
-                animation: _controller,
-              );
-            default:
-              return Container();
-          }
-        },
-        future: getUrl()
+    return AnimatedBuilder(
+      builder: (context, child) => _buildPage(context, child),
+      animation: _controller,
     );
-  }
-  
-  Future<String> getUrl() async {
-    var storageRef = FirebaseStorage.instance.ref();
-    _url = await storageRef.child("1.jpg").getDownloadURL();
-    return _url;
   }
 
   Widget _buildPage(BuildContext context, Widget child) {
     return OrientationBuilder(
       builder: (context, orientation) => Stack(
         children: <Widget>[
-          Opacity(
-            opacity: _listAnimation.animations.map((a) => a.value * 1 / 3).fold(0, (p, c) => p + c),
-            child: Image.network(
-              _url,
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-              alignment: Alignment.center,
-            ),
-          ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +72,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   offset: Offset(0, _offset + (-_listAnimation.animations[2].value * _offset)),
                   child: Opacity(
                     opacity: _listAnimation.animations[2].value,
-                    child: _buildSocialMediaButtons(),
+                    child: _buildIconBar(),
                   ),
                 ),
               ],
@@ -137,7 +100,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     ),
   );
 
-  _buildSocialMediaButtons() => ButtonBar(
+  _buildIconBar() => ButtonBar(
+    mainAxisSize: MainAxisSize.min,
+    children: <Widget>[
+      IconBarButton(
+        iconData: CustomIcons.facebook_squared,
+        url: "https://www.facebook.com/howardt12345page",
+      ),
+      IconBarButton(
+        iconData: CustomIcons.instagram,
+        url: "https://www.instagram.com/howardt12345",
+      ),
+      IconBarButton(
+        iconData: CustomIcons.github_circled,
+        url: "https://www.github.com/howardt12345",
+      ),
+      IconBarButton(
+        iconData: CustomIcons.linkedin_squared,
+        url: "https://www.linkedin.com/in/howardt12345",
+      ),
+    ],
+  );
+
+  _buildIconBarOld() => ButtonBar(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
       IconButton(
