@@ -1,3 +1,5 @@
+import 'package:firebase/firebase.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/utils/custom_icons.dart';
 import 'dart:html' as html;
@@ -15,6 +17,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   ListAnimation _listAnimation;
 
   double _screenSize = 0, _offset = -10;
+
+  String _url = '';
 
   @override
   void initState() {
@@ -40,10 +44,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     setState(() => _screenSize = screenWidth(context: context));
 
-    return AnimatedBuilder(
-      builder: _buildPage,
-      animation: _controller,
+    return FutureBuilder(
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return Container();
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            case ConnectionState.done:
+              return AnimatedBuilder(
+                builder: (context, child) => _buildPage(context, child),
+                animation: _controller,
+              );
+            default:
+              return Container();
+          }
+        },
+        future: getUrl()
     );
+  }
+  
+  Future<String> getUrl() async {
+    var storageRef = FirebaseStorage.instance.ref();
+    _url = await storageRef.child("1.jpg").getDownloadURL();
+    return _url;
   }
 
   Widget _buildPage(BuildContext context, Widget child) {
@@ -53,7 +80,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           Opacity(
             opacity: _listAnimation.animations.map((a) => a.value * 1 / 3).fold(0, (p, c) => p + c),
             child: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=fff4c788-550a-44a9-b29c-620888231edb",
+              _url,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
