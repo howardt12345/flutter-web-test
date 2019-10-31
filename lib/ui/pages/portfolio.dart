@@ -113,7 +113,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
     return Container(
       child: StaggeredGridView.count(
         shrinkWrap: true,
-        crossAxisCount: 12,
+        crossAxisCount: portrait ? 8 : 12,
         staggeredTiles: _staggeredTiles,
         children: _tiles,
         mainAxisSpacing: 4.0,
