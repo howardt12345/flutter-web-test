@@ -33360,7 +33360,7 @@ s=u.b.V(0,s.gl(s))
 u=b!==C.eD
 r=!u||o.f<=600
 q=K.bh(o.c).y2
-r=r?46:64
+r=r?46:56
 t=T.Mz(T.nZ(T.CZ(p,p,C.bv,!0,p,Q.p3(p,q.f.u4(r),"Hi, I'm Howard!"),C.ay,p,1,C.bw),s),new P.t(0,-10+t*-10))
 s=o.e.b[1]
 r=s.a
@@ -33370,7 +33370,7 @@ q=s.a
 q=s.b.V(0,q.gl(q))
 u=!u||o.f<=600
 s=K.bh(o.c).y2
-u=u?14:20
+u=u?14:18
 r=T.Mz(T.nZ(T.CZ(p,p,C.bv,!0,p,Q.p3(p,s.f.u4(u),"An Engineer, Flutter Developer, and Photographer"),C.ay,p,1,C.bw),q),new P.t(0,-10+r*-10))
 q=o.e.b[2]
 u=q.a
