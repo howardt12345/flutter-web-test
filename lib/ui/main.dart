@@ -33,7 +33,7 @@ class Main extends StatefulWidget {
     HomePage(),
     Container(
       decoration: BoxDecoration(
-        color: Colors.pinkAccent,
+        color: Colors.amber,
       ),
       child: Center(
         child: Text("Page 2"),
