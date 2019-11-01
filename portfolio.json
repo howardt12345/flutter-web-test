@@ -1,0 +1,18 @@
+{
+    "categories": [
+        {
+            "category": "Nature",
+            "subcategories": [
+                {
+                    "name": "Landscapes",
+                    "images": [
+                        {
+                            "name": "1.jpg",
+                            "portrait": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
