@@ -2,6 +2,7 @@
     "categories": [
         {
             "category": "Nature",
+            "icon": "nature",
             "subcategories": [
                 {
                     "name": "Landscapes",
