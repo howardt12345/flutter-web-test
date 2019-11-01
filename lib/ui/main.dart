@@ -98,22 +98,21 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
 
   _buildVerticalLayout() {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              child: widget.pages[selectedBarIndex],
+      appBar: PreferredSize(
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 8.0,
             ),
-            Material(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 8.0,
-                ),
-                child: _buildTabBar(selectedBarIndex),
-              ),
-            )
-          ],
+            child: _buildTabBar(selectedBarIndex),
+          ),
+        ),
+        preferredSize: new Size.fromHeight(56.0),
+      ),
+      body: SafeArea(
+        child: Container(
+          child: widget.pages[selectedBarIndex],
         ),
       ),
     );
