@@ -28,6 +28,11 @@ class PortfolioPage extends StatefulWidget {
 
     ]
   };
+  List<IconData> icons = [
+    Icons.landscape,
+    Icons.portrait,
+    Icons.nature,
+  ];
 
   @override
   _PortfolioPageState createState() => _PortfolioPageState();
@@ -36,7 +41,6 @@ class PortfolioPage extends StatefulWidget {
 class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   AnimationController _animController;
-  ScrollController _scrollController = ScrollController();
   List<String> _data = [];
   int _index = 0, _subindex = 0;
   double _screenSize = 0;
@@ -44,7 +48,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   List<Widget> _tiles = [];
 
   List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
-    const StaggeredTile.count(12, 2),
+    const StaggeredTile.count(8, 2),
     const StaggeredTile.count(4, 5),
     const StaggeredTile.count(4, 3),
     const StaggeredTile.count(4, 5),
@@ -152,60 +156,21 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           _subindex = 0;
         });
       },
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 16.0),
-          Text(
-            item,
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.body2.copyWith(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-              color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
-            ),
-          ),
-          SizedBox(height: 8.0),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            width: _index == index ? item.length * 9.0 : 0,
-            height: 2.0,
-            color: Theme.of(context).textTheme.body2.color,
-            curve: Curves.ease,
-          ),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            height: _index == index ? widget.menu[_data[index]].length * 48 : 0,
-            curve: Curves.ease,
-            child: _index == index ? Column(
-              children: widget.menu[_data[index]].map((s) => _buildSubMenu(context, s, widget.menu[_data[index]].indexOf(s))).toList(),
-            ) : null,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSubMenu(BuildContext context, String item, int subindex) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _subindex = subindex;
-        });
-      },
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 16.0),
-          Text(
-            item,
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.body2.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                color: _subindex == subindex ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
-            ),
-          ),
-          SizedBox(height: 8.0),
-        ],
+      child: MenuItem(
+        selected: _index == index,
+        title: item,
+        subMenu: widget.menu[_data[index]],
+        iconData: widget.icons[index],
+        submenuFunction: (i) {
+          setState(() {
+            _subindex = i;
+          });
+        },
+        onTap: () {
+          setState(() {
+            _index = index;
+          });
+        },
       ),
     );
   }
@@ -261,7 +226,7 @@ class _ImageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Card(
       color: const Color(0x00000000),
-      elevation: 3.0,
+      elevation: 0.0,
       child: new GestureDetector(
         onTap: () {
           print("hello");
@@ -291,23 +256,119 @@ class _ImageTile extends StatelessWidget {
   }
 }
 
-class _Example01Tile extends StatelessWidget {
-  const _Example01Tile(this.backgroundColor, this.iconData);  final Color backgroundColor;
-  final IconData iconData;  @override
+class MenuItem extends StatefulWidget {
+  String title;
+  IconData iconData;
+  List<String> subMenu;
+  Function(int index) submenuFunction;
+  Function onTap;
+  bool selected;
+
+  MenuItem({
+    this.selected,
+    this.title,
+    this.iconData,
+    this.subMenu,
+    this.submenuFunction,
+    this.onTap,
+  });
+
+  @override
+  _MenuItemState createState() => _MenuItemState();
+}
+
+class _MenuItemState extends State<MenuItem> {
+
+  bool minimized = true;
+  int _subindex = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return new Card(
-      color: backgroundColor,
-      child: new InkWell(
-        onTap: () {},
-        child: new Center(
-          child: new Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: new Icon(
-              iconData,
-              color: Colors.white,
+    return GestureDetector(
+      onTap: () {
+          setState(() {
+          if(widget.selected) {
+            minimized = !minimized;
+          } else {
+            widget.onTap();
+          }
+        });
+      },
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height: 16.0),
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).textTheme.body2.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: widget.selected ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        width: widget.selected ? widget.title.length * 9.0 : 0,
+                        height: 2.0,
+                        color: Theme.of(context).textTheme.body2.color,
+                        curve: Curves.ease,
+                      ),
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                ),
+              ),
+              Container(
+                child: Icon(
+                  widget.iconData,
+                  color: widget.selected ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
+                  size: 24,
+                ),
+              ),
+            ],
+          ),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            height: !minimized ? widget.subMenu.length * 48 : 0,
+            curve: Curves.ease,
+            child: !minimized ? Column(
+              children: widget.subMenu.map((s) => _buildSubMenu(context, s, widget.subMenu.indexOf(s))).toList(),
+            ) : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubMenu(BuildContext context, String item, int subindex) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _subindex = subindex;
+          widget.submenuFunction(subindex);
+        });
+      },
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 16.0),
+          Text(
+            item,
+            textAlign: TextAlign.left,
+            style: Theme.of(context).textTheme.body2.copyWith(
+                fontWeight: FontWeight.w400,
+                color: _subindex == subindex ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
             ),
           ),
-        ),
+          SizedBox(height: 8.0),
+        ],
       ),
     );
   }
