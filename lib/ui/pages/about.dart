@@ -164,8 +164,12 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
       children: contact.keys.map((c) =>
           Row(
             children: <Widget>[
-              Icon(
-                  iconMapping[c]
+              Container(
+                child: Icon(
+                  iconMapping[c],
+                  size: 16,
+                ),
+                padding: EdgeInsets.only(right: 8.0),
               ),
               RichText(
                 text: TextSpan(
