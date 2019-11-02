@@ -11,34 +11,6 @@ import 'package:transparent_image/transparent_image.dart';
 
 // ignore: must_be_immutable
 class PortfolioPage extends StatefulWidget {
-  Map<String, List<String>> menu = {
-    "Category1": [
-      "All",
-      "Subcategory 1",
-      "Subcategory 2",
-      "Subcategory 3",
-    ],
-    "Category2": [
-      "All",
-      "Subcategory 1",
-      "Subcategory 2",
-      "Subcategory 3",
-    ],
-    "Category3": [
-      "All",
-      "Subcategory 1",
-      "Subcategory 2",
-      "Subcategory 3",
-      "Subcategory 4",
-      "Subcategory 5",
-
-    ]
-  };
-  List<IconData> icons = [
-    Icons.landscape,
-    Icons.portrait,
-    Icons.nature_people,
-  ];
 
   @override
   _PortfolioPageState createState() => _PortfolioPageState();
@@ -60,7 +32,6 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   @override
   void initState() {
     _animController = AnimationController(vsync: this);
-    _data = widget.menu.keys.toList();
     super.initState();
     _initializeManager();
   }
@@ -229,7 +200,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                       SizedBox(height: 8.0),
                       AnimatedContainer(
                         duration: Duration(milliseconds: 300),
-                        width: _index == index ? item.length * 8.5 : 0,
+                        width: _index == index ? item.length * 10 : 0,
                         height: 2.0,
                         color: Theme.of(context).textTheme.body2.color,
                         curve: Curves.ease,
@@ -250,7 +221,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _index == index ? widget.menu[_data[index]].length * 40 : 0,
+            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 40 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
               children: manager.getSubcategoriesFrom(index).map((s) {
@@ -311,6 +282,10 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
     } else {
       for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
         var pic = manager.getPicturesFrom(_index, _subindex)[i];
+        print('${manager.url}'
+            '${pic.path.replaceAll('/', '%2F')}%2F'
+            '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
+            '${manager.token}');
         widgets.add(
             _ImageTile(
                 '${manager.url}'
