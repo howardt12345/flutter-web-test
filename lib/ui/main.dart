@@ -92,7 +92,7 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
-    int selectedBarIndex = widget.initialPage;
+    selectedBarIndex = widget.initialPage;
     super.initState();
   }
 
