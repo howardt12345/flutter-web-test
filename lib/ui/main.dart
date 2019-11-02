@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_web_test/ui/pages/about.dart';
 
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/ui/pages/portfolio.dart';
@@ -31,14 +32,7 @@ class Main extends StatefulWidget {
   ];
   final List<Widget> pages = [
     HomePage(),
-    Container(
-      decoration: BoxDecoration(
-        color: Colors.amber,
-      ),
-      child: Center(
-        child: Text("Page 2"),
-      ),
-    ),
+    AboutPage(),
     PortfolioPage(),
     Container(
       decoration: BoxDecoration(

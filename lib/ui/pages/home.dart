@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   offset: Offset(0, _offset + (-_listAnimation.animations[2].value * _offset)),
                   child: Opacity(
                     opacity: _listAnimation.animations[2].value,
-                    child: _buildIconBar(),
+                    child: buildIconBar(),
                   ),
                 ),
               ],
@@ -108,40 +108,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           fontSize: isPortrait ? 14 : 18
       ),
     ),
-  );
-
-  _buildIconBar() => Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: IconBarButton(
-          iconData: CustomIcons.facebook_squared,
-          url: "https://www.facebook.com/howardt12345page",
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: IconBarButton(
-          iconData: CustomIcons.instagram,
-          url: "https://www.instagram.com/howardt12345",
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: IconBarButton(
-          iconData: CustomIcons.github_circled,
-          url: "https://www.github.com/howardt12345",
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.all(12.0),
-        child: IconBarButton(
-          iconData: CustomIcons.linkedin_squared,
-          url: "https://www.linkedin.com/in/howardt12345",
-        ),
-      ),
-    ],
   );
 
   _buildIconBarOld() => ButtonBar(
@@ -185,3 +151,54 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     ],
   );
 }
+
+buildIconBar() => Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    Padding(
+      padding: EdgeInsets.all(12.0),
+      child: IconBarButton(
+        iconData: CustomIcons.facebook_squared,
+        url: "https://www.facebook.com/howardt12345page",
+      ),
+    ),
+    Padding(
+      padding: EdgeInsets.all(12.0),
+      child: IconBarButton(
+        iconData: CustomIcons.instagram,
+        url: "https://www.instagram.com/howardt12345",
+      ),
+    ),
+    Padding(
+      padding: EdgeInsets.all(12.0),
+      child: IconBarButton(
+        iconData: CustomIcons.github_circled,
+        url: "https://www.github.com/howardt12345",
+      ),
+    ),
+    Padding(
+      padding: EdgeInsets.all(12.0),
+      child: IconBarButton(
+        iconData: CustomIcons.linkedin_squared,
+        url: "https://www.linkedin.com/in/howardt12345",
+      ),
+    ),
+  ],
+);
+
+buildCopyrightText() => Column(
+  mainAxisSize: MainAxisSize.min,
+  children: <Widget>[
+    new SizedBox(
+      height: 8.0,
+      child: new Center(
+        child: new Container(
+          margin: new EdgeInsetsDirectional.only(start: 0.5, end: 0.5),
+          height: 1.0,
+          color: Colors.grey,
+        ),
+      ),
+    ),
+    Text("© 2019 Howard Tseng, All rights reserved.")
+  ],
+);

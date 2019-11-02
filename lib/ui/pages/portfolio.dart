@@ -7,6 +7,7 @@ import 'package:flutter_web_test/utils/functions.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'home.dart';
 
 
 // ignore: must_be_immutable
@@ -22,7 +23,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   AnimationController _animController;
   List<String> _data = [];
-  int _index = 0, _subindex = 1;
+  int _index = 0, _subindex = 0;
   double _screenSize = 0;
 
   List<Widget> _tiles = [];
@@ -159,6 +160,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               crossAxisSpacing: 4.0,
               padding: const EdgeInsets.all(4.0),
             ),
+            buildCopyrightText(),
           ],
         ),
       ),
@@ -302,16 +304,18 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
       },
       child: Column(
         children: <Widget>[
-          SizedBox(height: 16.0),
-          Text(
-            item,
-            textAlign: TextAlign.left,
-            style: Theme.of(context).textTheme.body2.copyWith(
-                fontWeight: FontWeight.w400,
-                color: _subindex == subindex ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              item,
+              textAlign: TextAlign.left,
+              style: Theme.of(context).textTheme.body2.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: _subindex == subindex ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
+              ),
             ),
           ),
-          SizedBox(height: 8.0),
         ],
       ),
     );

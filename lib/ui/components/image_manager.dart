@@ -10,6 +10,9 @@ Map<String, IconData> iconMapping = {
   'portraits': Icons.portrait,
   'nature': Icons.nature_people,
   'misc': Icons.more_horiz,
+  'email': Icons.email,
+  'school': Icons.school,
+  'location': Icons.location_on,
 };
 
 class PictureManager {
