@@ -119,7 +119,8 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   }
 
   _buildViewer(bool portrait) {
-    return Container(
+    return Align(
+      alignment: Alignment.topCenter,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
