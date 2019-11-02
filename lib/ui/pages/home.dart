@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           Opacity(
             opacity: _listAnimation.animations.map((a) => a.value * 1 / _listAnimation.animations.length).fold(0, (p, c) => p + c),
             child: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/Nature%2FLandscapes%2F1.jpg?alt=media&token=810d1310-0533-4e13-bc33-6fc77ac56ef1",
+              "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/Nature%2FLandscapes%2F(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=73c5f2d7-8409-4563-a46e-be2e22d28f67",
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,

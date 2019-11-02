@@ -18,6 +18,8 @@ class PortfolioPage extends StatefulWidget {
 
 class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
   AnimationController _animController;
   List<String> _data = [];
   int _index = 0, _subindex = 1;
@@ -55,6 +57,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   Widget build(BuildContext context) {
     setState(() {
       _screenSize = screenWidth(context: context);
+      _scaffoldKey = new GlobalKey();
     });
     return FutureBuilder(
       future: _initializeManager(),
@@ -80,9 +83,20 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   }
 
   _buildVerticalLayout() {
-    return Container(
-      child: Center(
-        child: _buildViewer(true),
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: _buildFullDrawer(),
+      ),
+      body: Container(
+        child: Row(
+          children: <Widget>[
+            _buildIconDrawer(),
+            Expanded(
+              child: _buildViewer(true),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -92,7 +106,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: _buildDrawer(),
+            child: _buildFullDrawer(),
           ),
           Expanded(
             flex: 3,
@@ -108,6 +122,9 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Container(
+              height: portrait ? 0 : 56.0,
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
@@ -147,8 +164,45 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
       ),
     );
   }
-  
-  _buildDrawer() {
+
+  _buildIconDrawer() {
+    return Container(
+      width: 56.0,
+      child: GestureDetector(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ListView(
+            shrinkWrap: true,
+            children: [IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState.openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                size: 24,
+              ),
+            )] + manager.getCategories().map((c) {
+              return IconButton(
+                onPressed: () {
+                  setState(() {
+                    _index = manager.getCategories().indexOf(c);
+                    _subindex = 0;
+                  });
+                },
+                icon: Icon(
+                  iconMapping[manager.getPictures(c, 'icon')[0].title],
+                  color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
+                  size: 24,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      )
+    );
+  }
+
+  _buildFullDrawer() {
     return Container(
       decoration: BoxDecoration(
         border: Border(
