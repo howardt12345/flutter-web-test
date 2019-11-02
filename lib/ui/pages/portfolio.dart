@@ -171,6 +171,14 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   _buildIconDrawer() {
     return Container(
       width: 56.0,
+      decoration: BoxDecoration(
+          border: Border(
+              right: BorderSide(
+                  width: 1.0,
+                  color: Theme.of(context).textTheme.title.color
+              )
+          )
+      ),
       child: GestureDetector(
         child: Align(
           alignment: Alignment.topCenter,
