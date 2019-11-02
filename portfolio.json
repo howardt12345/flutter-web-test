@@ -18,6 +18,26 @@
                             "height": 5
                         }
                     ]
+                },
+                {
+                    "name": "Miscellaneous",
+                    "images": [
+                        {
+                            "title": "(Canon EOS 7D Mark II) 2019_05_11 10_20_43-Edited (Web)_.jpg",
+                            "width": 4,
+                            "height": 3
+                        },
+                        {
+                            "title": "(Canon EOS 7D Mark II) 2019_05_11 10_20_57-Edited (Web)_.jpg",
+                            "width": 4,
+                            "height": 3
+                        },
+                        {
+                            "title": "(Canon EOS 7D Mark II) 2019_05_11 10_27_51-Edited (Web)_.jpg",
+                            "width": 4,
+                            "height": 3
+                        }
+                    ]
                 }
             ]
         }

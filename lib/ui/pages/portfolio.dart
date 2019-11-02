@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+
 
 // ignore: must_be_immutable
 class PortfolioPage extends StatefulWidget {
@@ -34,7 +37,7 @@ class PortfolioPage extends StatefulWidget {
   List<IconData> icons = [
     Icons.landscape,
     Icons.portrait,
-    Icons.nature,
+    Icons.nature_people,
   ];
 
   @override
@@ -45,30 +48,21 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   AnimationController _animController;
   List<String> _data = [];
-  int _index = 0, _subindex = 0;
+  int _index = 0, _subindex = 1;
   double _screenSize = 0;
 
   List<Widget> _tiles = [];
 
-  List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
-    const StaggeredTile.count(8, 1),
-    const StaggeredTile.count(4, 5),
-    const StaggeredTile.count(4, 3),
-    const StaggeredTile.count(4, 5),
-    const StaggeredTile.count(4, 3),
-    const StaggeredTile.count(4, 5),
-    const StaggeredTile.count(4, 3),
-    const StaggeredTile.count(4, 5),
-    const StaggeredTile.count(4, 3),
-    const StaggeredTile.count(4, 5),
-    const StaggeredTile.count(4, 3),
-  ];
+  PictureManager manager;
+
+  List<StaggeredTile> _staggeredTiles = [];
 
   @override
   void initState() {
     _animController = AnimationController(vsync: this);
     _data = widget.menu.keys.toList();
     super.initState();
+    _initializeManager();
   }
 
   @override
@@ -77,18 +71,40 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
     super.dispose();
   }
 
+  Future<void> _initializeManager() async {
+    manager = await PictureManager.fromUrl(
+      jsonUrl: "https://raw.githubusercontent.com/howardt12345/flutter-web-test/master/portfolio.json",
+      url: "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/",
+      token: "810d1310-0533-4e13-bc33-6fc77ac56ef1",
+    );
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     setState(() {
-      _tiles = _getWidgets(true);
       _screenSize = screenWidth(context: context);
     });
-
-    return OrientationBuilder(
-      builder: (context, orientation) =>
-      (orientation == Orientation.portrait || _screenSize <= 600)
-          ? _buildVerticalLayout()
-          : _buildHorizontalLayout(),
+    return FutureBuilder(
+      future: _initializeManager(),
+      builder: (context, snapshot) {
+        if(snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if(snapshot.connectionState == ConnectionState.done){
+          return OrientationBuilder(
+            builder: (context, orientation) =>
+            (orientation == Orientation.portrait || _screenSize <= 600)
+                ? _buildVerticalLayout()
+                : _buildHorizontalLayout(),
+          );
+        } else {
+          return Center(
+            child: Text("oop"),
+          );
+        }
+      },
     );
   }
 
@@ -118,14 +134,45 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   _buildViewer(bool portrait) {
     return Container(
-      child: StaggeredGridView.count(
-        shrinkWrap: true,
-        crossAxisCount: portrait ? 8 : 12,
-        staggeredTiles: _staggeredTiles,
-        children: _tiles,
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        padding: const EdgeInsets.all(4.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: manager.getCategories()[_index],
+                          style: Theme.of(context).textTheme.body1.copyWith(
+                            fontSize: 40,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ": ${_subindex == 0 ? "All" : manager.getSubcategoriesFrom(_index)[_subindex]}",
+                          style: Theme.of(context).textTheme.body1.copyWith(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ]
+                  ),
+                ),
+              ),
+            ),
+            StaggeredGridView.count(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              crossAxisCount: portrait ? 8 : 12,
+              staggeredTiles: _getTiles(),
+              children: _getWidgets(),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              padding: const EdgeInsets.all(4.0),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -144,8 +191,8 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
         child: AnimatedList(
           key: _listKey,
           shrinkWrap: true,
-          initialItemCount: _data.length,
-          itemBuilder: (context, index, animation) => _buildItem(context, _data[index], index, animation),
+          initialItemCount: manager.getCategories().length,
+          itemBuilder: (context, index, animation) => _buildItem(context, manager.getCategory(index), index, animation),
         ),
       ),
     );
@@ -156,6 +203,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
       onTap: () {
         setState(() {
           _index = index;
+          _subindex = 0;
         });
       },
       child: Column(
@@ -172,16 +220,16 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                       Text(
                         item,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.body2.copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
+                        style: Theme.of(context).textTheme.body1.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
                         ),
                       ),
                       SizedBox(height: 8.0),
                       AnimatedContainer(
                         duration: Duration(milliseconds: 300),
-                        width: _index == index ? item.length * 9.0 : 0,
+                        width: _index == index ? item.length * 8.5 : 0,
                         height: 2.0,
                         color: Theme.of(context).textTheme.body2.color,
                         curve: Curves.ease,
@@ -193,7 +241,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Icon(
-                  widget.icons[index],
+                  iconMapping[manager.getPictures(manager.getCategory(index), 'icon')[0].title],
                   color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -205,7 +253,14 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
             height: _index == index ? widget.menu[_data[index]].length * 40 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
-              children: widget.menu[_data[index]].map((s) => _buildSubMenu(context, s, widget.menu[_data[index]].indexOf(s))).toList(),
+              children: manager.getSubcategoriesFrom(index).map((s) {
+                if(manager.getSubcategoriesFrom(index).indexOf(s) == 0) {
+                  return _buildSubMenu(context, "All", 0);
+                } else {
+                  return _buildSubMenu(context, s,
+                      manager.getSubcategoriesFrom(index).indexOf(s));
+                }
+              }).toList(),
             ) : null,
           ),
         ],
@@ -237,35 +292,63 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
     );
   }
 
-  List<Widget> _getWidgets(bool portrait) {
-    List<Widget> tiles = [
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: RichText(
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: _data[_index],
-                    style: Theme.of(context).textTheme.body1.copyWith(
-                      fontSize: 40,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ": ${widget.menu[_data[_index]][_subindex]}",
-                    style: Theme.of(context).textTheme.body1.copyWith(
-                      fontSize: 20,
-                    ),
-                  ),
-                ]
-            ),
-          ),
-        ),
-      )
-    ];
-    for(var i = 0; i < 10; i++) {
-      tiles.add(_ImageTile('https://picsum.photos/${Random.secure().nextInt(500)}/300/?random'));
+  List<Widget> _getWidgets() {
+    List<Widget> widgets = [];
+    if(_subindex == 0) {
+      for(var h = 1; h < (manager.getSubcategoriesFrom(_index).length); h++) {
+        for(var i = 0; i < manager.getPicturesFrom(_index, h).length; i++) {
+          var pic = manager.getPicturesFrom(_index, h)[i];
+          widgets.add(
+              _ImageTile(
+                  '${manager.url}'
+                      '${pic.path.replaceAll('/', '%2F')}%2F'
+                      '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
+                      '${manager.token}'
+              )
+          );
+        }
+      }
+    } else {
+      for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
+        var pic = manager.getPicturesFrom(_index, _subindex)[i];
+        widgets.add(
+            _ImageTile(
+                '${manager.url}'
+                    '${pic.path.replaceAll('/', '%2F')}%2F'
+                    '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
+                    '${manager.token}'
+            )
+        );
+      }
+    }
+    return widgets;
+  }
+
+  List<StaggeredTile> _getTiles() {
+    List<StaggeredTile> tiles = [];
+
+    if(_subindex == 0) {
+      for(var h = 1; h < (manager.getSubcategoriesFrom(_index).length); h++) {
+        for(var i = 0; i < manager.getPicturesFrom(_index, h).length; i++) {
+          var pic = manager.getPicturesFrom(_index, h)[i];
+          tiles.add(
+              StaggeredTile.count(
+                  pic.width,
+                  pic.height
+              )
+          );
+        }
+      }
+    } else {
+      for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
+        var pic = manager.getPicturesFrom(_index, _subindex)[i];
+        tiles.add(
+            StaggeredTile.count(
+                pic.width,
+                pic.height
+            )
+        );
+      }
     }
     return tiles;
   }
