@@ -4,10 +4,45 @@ import 'package:flutter_web_test/ui/pages/about.dart';
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/ui/pages/portfolio.dart';
 import 'package:flutter_web_test/utils/functions.dart';
+import 'package:flutter_web_test/utils/route.dart';
 
 import 'components/animated_tab_bar.dart';
 
 class Main extends StatefulWidget {
+  int initialPage;
+
+  Main({this.initialPage});
+
+
+  static Route<dynamic> homeRoute() {
+    return SimpleRoute(
+      name: '/',
+      title: 'home',
+      builder: (_) => Main(initialPage: 0,),
+    );
+  }
+  static Route<dynamic> aboutRoute() {
+    return SimpleRoute(
+      name: '/about',
+      title: 'about',
+      builder: (_) => Main(initialPage: 1,),
+    );
+  }
+  static Route<dynamic> portfolioRoute() {
+    return SimpleRoute(
+      name: '/portfolio',
+      title: 'portfolio',
+      builder: (_) => Main(initialPage: 2,),
+    );
+  }
+  static Route<dynamic> contactRoute() {
+    return SimpleRoute(
+      name: '/contact',
+      title: 'contact',
+      builder: (_) => Main(initialPage: 3,),
+    );
+  }
+
   final List<BarItem> barItems = [
     BarItem(
       text: "Home",
@@ -52,11 +87,12 @@ class _MainState extends State<Main> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   double _screenSize = 0;
-  int selectedBarIndex = 0;
+  int selectedBarIndex;
 
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
+    int selectedBarIndex = widget.initialPage;
     super.initState();
   }
 

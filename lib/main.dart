@@ -8,12 +8,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      onGenerateRoute: (settings) {
+        switch(settings.name) {
+          case "/": return Main.homeRoute();
+          case "/about": return Main.aboutRoute();
+          case "/portfolio": return Main.portfolioRoute();
+          case "/contact": return Main.contactRoute();
+          default: return Main.homeRoute();
+        }
+      },
+      initialRoute: "/",
       title: 'howardt12345',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: "Roboto"
       ),
-      home: Main(),
     );
   }
 }
