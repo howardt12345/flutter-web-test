@@ -22,6 +22,8 @@ dependencies:
 
   flutter_staggered_grid_view: any
   http: any
+  mailer: any
+  photo_view: any
   transparent_image: any
 
   # The following adds the Cupertino Icons font to your application.
