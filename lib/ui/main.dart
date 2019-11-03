@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
-import 'package:flutter_web_test/ui/pages/about.dart';
 
+import 'package:flutter_web_test/ui/pages/about.dart';
+import 'package:flutter_web_test/ui/pages/contact.dart';
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/ui/pages/portfolio.dart';
+
 import 'package:flutter_web_test/utils/functions.dart';
 import 'package:flutter_web_test/utils/route.dart';
 
@@ -17,28 +19,28 @@ class Main extends StatefulWidget {
   static Route<dynamic> homeRoute() {
     return SimpleRoute(
       name: '/',
-      title: 'home',
+      title: 'Howard Tseng',
       builder: (_) => Main(initialPage: 0,),
     );
   }
   static Route<dynamic> aboutRoute() {
     return SimpleRoute(
       name: '/about',
-      title: 'about',
+      title: 'Howard Tseng',
       builder: (_) => Main(initialPage: 1,),
     );
   }
   static Route<dynamic> portfolioRoute() {
     return SimpleRoute(
       name: '/portfolio',
-      title: 'portfolio',
+      title: 'Howard Tseng',
       builder: (_) => Main(initialPage: 2,),
     );
   }
   static Route<dynamic> contactRoute() {
     return SimpleRoute(
       name: '/contact',
-      title: 'contact',
+      title: 'Howard Tseng',
       builder: (_) => Main(initialPage: 3,),
     );
   }
@@ -69,14 +71,7 @@ class Main extends StatefulWidget {
     HomePage(),
     AboutPage(),
     PortfolioPage(),
-    Container(
-      decoration: BoxDecoration(
-        color: Colors.teal,
-      ),
-      child: Center(
-        child: Text("Page 4"),
-      ),
-    ),
+    ContactPage(),
   ];
 
   @override

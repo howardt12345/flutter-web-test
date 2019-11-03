@@ -38,8 +38,8 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
   }
 
   Future<void> _getInfo() async {
-    _about = await _getAbout('https://raw.githubusercontent.com/howardt12345/flutter-web-test/master/about.txt');
-    await _getContact('https://raw.githubusercontent.com/howardt12345/flutter-web-test/master/contact.json');
+    _about = await _getAbout('https://raw.githubusercontent.com/howardt12345/website/master/about.txt');
+    await _getContact('https://raw.githubusercontent.com/howardt12345/website/master/contact.json');
     return null;
   }
 
