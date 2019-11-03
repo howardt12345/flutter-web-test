@@ -10,22 +10,26 @@
                         {
                             "title": "(Canon EOS 70D) 2019_10_20 12_30_57-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 5
+                            "height": 5,
+                            "description": "temp"
                         },
                         {
                             "title": "(Canon EOS 70D) 2019_10_20 11_12_17-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 3
+                            "height": 3,
+                            "description": "temp"
                         },
                         {
                             "title": "(Canon EOS 77D) 2019_10_15 07_18_05-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 3
+                            "height": 3,
+                            "description": "temp"
                         },
                         {
                             "title": "(Canon EOS 77D) 2019_10_15 07_58_31-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 5
+                            "height": 5,
+                            "description": "temp"
                         }
                     ]
                 },
@@ -35,17 +39,20 @@
                         {
                             "title": "(Canon EOS 7D Mark II) 2019_05_11 10_20_43-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 3
+                            "height": 3,
+                            "description": "temp"
                         },
                         {
                             "title": "(Canon EOS 7D Mark II) 2019_05_11 10_20_57-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 3
+                            "height": 3,
+                            "description": "temp"
                         },
                         {
                             "title": "(Canon EOS 7D Mark II) 2019_05_11 10_27_51-Edited (Web)_.jpg",
                             "width": 4,
-                            "height": 3
+                            "height": 3,
+                            "description": "temp"
                         }
                     ]
                 }

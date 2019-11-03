@@ -94,7 +94,7 @@ class PictureManager {
 }
 
 class Picture {
-  final String title, path;
+  final String title, path, description;
   final int width;
   final double height;
 
@@ -103,12 +103,14 @@ class Picture {
     this.title,
     this.width,
     this.height,
+    this.description,
   });
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
     title: json['title'],
     width: json['width'],
     height: json['height'],
+    description: json['description'],
     path: path,
   );
 }

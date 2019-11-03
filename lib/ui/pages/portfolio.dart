@@ -22,15 +22,10 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   AnimationController _animController;
-  List<String> _data = [];
   int _index = 0, _subindex = 0;
   double _screenSize = 0;
 
-  List<Widget> _tiles = [];
-
   PictureManager manager;
-
-  List<StaggeredTile> _staggeredTiles = [];
 
   @override
   void initState() {
@@ -47,7 +42,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   Future<void> _initializeManager() async {
     manager = await PictureManager.fromUrl(
-      jsonUrl: "https://raw.githubusercontent.com/howardt12345/flutter-web-test/master/portfolio.json",
+      jsonUrl: "https://raw.githubusercontent.com/howardt12345/website/master/portfolio.json",
       url: "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/",
       token: "810d1310-0533-4e13-bc33-6fc77ac56ef1",
     );
@@ -338,10 +333,9 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           var pic = manager.getPicturesFrom(_index, h)[i];
           widgets.add(
               _ImageTile(
-                  '${manager.url}'
-                      '${pic.path.replaceAll('/', '%2F')}%2F'
-                      '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-                      '${manager.token}'
+                pic: pic,
+                url: manager.url,
+                token: manager.token,
               )
           );
         }
@@ -355,10 +349,9 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
             '${manager.token}');
         widgets.add(
             _ImageTile(
-                '${manager.url}'
-                    '${pic.path.replaceAll('/', '%2F')}%2F'
-                    '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-                    '${manager.token}'
+              pic: pic,
+              url: manager.url,
+              token: manager.token,
             )
         );
       }
@@ -398,9 +391,13 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 }
 
 class _ImageTile extends StatelessWidget {
-  const _ImageTile(this.gridImage);
+  const _ImageTile({
+    this.pic,
+    this.url,
+    this.token,
+  });
 
-  final gridImage;
+  final pic, url, token;
 
   @override
   Widget build(BuildContext context) {
@@ -409,7 +406,13 @@ class _ImageTile extends StatelessWidget {
       elevation: 0.0,
       child: new GestureDetector(
         onTap: () {
-          print("hello");
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return _DetailScreen(
+              pic: pic,
+              url: url,
+              token: token,
+            );
+          }));
         },
         child: new Container(
           decoration: new BoxDecoration(
@@ -419,19 +422,129 @@ class _ImageTile extends StatelessWidget {
             children: [
               Center(child: CircularProgressIndicator()),
               Center(
-                child: FadeInImage.memoryNetwork(
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  placeholder: kTransparentImage,
-                  image: gridImage,
+                child: Hero(
+                  tag: '${pic.path}/${pic.title}',
+                  child: FadeInImage.memoryNetwork(
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    placeholder: kTransparentImage,
+                    image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token',
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DetailScreen extends StatefulWidget {
+  final pic, url, token;
+
+  _DetailScreen({
+    this.pic,
+    this.url,
+    this.token,
+  });
+
+  @override
+  __DetailScreenState createState() => __DetailScreenState();
+}
+
+class __DetailScreenState extends State<_DetailScreen> {
+  double _screenSize = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return (MediaQuery.of(context).size.aspectRatio < widget.pic.width/widget.pic.height)
+        ? _buildVerticalLayout()
+        : _buildHorizontalLayout();
+  }
+
+  _buildVerticalLayout() {
+    print("vertical");
+    return GestureDetector(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Stack(
+          children: [
+            Center(child: CircularProgressIndicator()),
+            Hero(
+              tag: '${widget.pic.path}/${widget.pic.title}',
+              child: FadeInImage.memoryNetwork(
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.center,
+                placeholder: kTransparentImage,
+                image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+              ),
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  _buildHorizontalLayout() {
+    print("horizontal");
+    return GestureDetector(
+      child: Container(
+        child: Stack(
+          children: [
+            Container(
+              color: Colors.black,
+            ),
+            Align(
+              alignment: AlignmentDirectional(-0.5, 0),
+              child: CircularProgressIndicator(),
+            ),
+            Align(
+              alignment: AlignmentDirectional(-0.5, 0),
+              child: Hero(
+                tag: widget.pic.path,
+                child: FadeInImage.memoryNetwork(
+                  fit: BoxFit.fill,
+                  alignment: Alignment.center,
+                  placeholder: kTransparentImage,
+                  image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Colors.black.withAlpha(0), Colors.black.withAlpha(155)],
+                        tileMode: TileMode.repeated,
+                      ),
+                    ),
+                    width: 84.0,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width/4-84,
+                    color: Colors.black.withAlpha(155),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        Navigator.pop(context);
+      },
     );
   }
 }
