@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Howard Tseng',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: "Roboto"
+        fontFamily: "Roboto",
       ),
     );
   }

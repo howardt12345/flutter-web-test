@@ -401,9 +401,7 @@ class _ImageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      color: const Color(0x00000000),
-      elevation: 0.0,
+    return Container(
       child: new GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -416,8 +414,9 @@ class _ImageTile extends StatelessWidget {
         },
         child: new Container(
           decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.all(const Radius.circular(10.0)),
+            borderRadius: new BorderRadius.all(const Radius.circular(20.0)),
           ),
+          padding: EdgeInsets.all(1.5),
           child: Stack(
             children: [
               Center(child: CircularProgressIndicator()),
