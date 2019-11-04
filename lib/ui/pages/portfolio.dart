@@ -416,7 +416,7 @@ class _ImageTile extends StatelessWidget {
           decoration: new BoxDecoration(
             borderRadius: new BorderRadius.all(const Radius.circular(20.0)),
           ),
-          padding: EdgeInsets.all(1.5),
+          padding: EdgeInsets.all(1.0),
           child: Stack(
             children: [
               Center(child: CircularProgressIndicator()),
