@@ -30,21 +30,30 @@ class PictureManager {
     for(var category in json['categories']) {
       String categoryName = category['category'];
       String iconName = category['icon'];
-      List<dynamic> subcategories = category['subcategories'];
+
 
       Map<String, List<Picture>> subTmp = Map<String, List<Picture>>();
 
       subTmp['icon'] = [Picture(title: iconName)];
 
-      subcategories.forEach((subcategory) {
-        String subcategoryName = subcategory['name'];
-        List<dynamic> images = subcategory['images'];
-        List<Picture> pictures = [];
-        images.forEach((image) {
-          pictures.add(Picture.fromJson(image, '$categoryName/$subcategoryName'));
+      if(category['subcategories'].length != 0) {
+        List<dynamic> subcategories = category['subcategories'];
+        subcategories.forEach((subcategory) {
+          String subcategoryName = subcategory['name'];
+          List<dynamic> images = subcategory['images'];
+          List<Picture> pictures = [];
+          images.forEach((image) {
+            pictures.add(Picture.fromJson(image, '$categoryName/$subcategoryName'));
+          });
+          subTmp[subcategoryName] = pictures;
+          subTmp['icon'].addAll(pictures);
         });
-        subTmp[subcategoryName] = pictures;
-      });
+      } else {
+        List<dynamic> images = category['images'];
+        images.forEach((image) {
+          subTmp['icon'].add(Picture.fromJson(image, '$categoryName'));
+        });
+      }
 
       tmpMenu[categoryName] = subTmp;
     }
@@ -94,7 +103,7 @@ class PictureManager {
 }
 
 class Picture {
-  final String title, path, description;
+  final String title, path, description, buy;
   final int width;
   final double height;
 
@@ -104,6 +113,7 @@ class Picture {
     this.width,
     this.height,
     this.description,
+    this.buy,
   });
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
@@ -111,6 +121,7 @@ class Picture {
     width: json['width'],
     height: json['height'],
     description: json['description'],
+    buy: json['buy'],
     path: path,
   );
 }

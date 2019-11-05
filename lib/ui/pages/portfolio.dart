@@ -281,7 +281,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 40 : 0,
+            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 36 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
               children: manager.getSubcategoriesFrom(index).map((s) {
@@ -328,17 +328,19 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   List<Widget> _getWidgets() {
     List<Widget> widgets = [];
     if(_subindex == 0) {
-      for(var h = 1; h < (manager.getSubcategoriesFrom(_index).length); h++) {
-        for(var i = 0; i < manager.getPicturesFrom(_index, h).length; i++) {
-          var pic = manager.getPicturesFrom(_index, h)[i];
-          widgets.add(
-              _ImageTile(
-                pic: pic,
-                url: manager.url,
-                token: manager.token,
-              )
-          );
-        }
+      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
+        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
+        print('${manager.url}'
+            '${pic.path.replaceAll('/', '%2F')}%2F'
+            '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
+            '${manager.token}');
+        widgets.add(
+            _ImageTile(
+              pic: pic,
+              url: manager.url,
+              token: manager.token,
+            )
+        );
       }
     } else {
       for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
@@ -361,18 +363,15 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   List<StaggeredTile> _getTiles() {
     List<StaggeredTile> tiles = [];
-
     if(_subindex == 0) {
-      for(var h = 1; h < (manager.getSubcategoriesFrom(_index).length); h++) {
-        for(var i = 0; i < manager.getPicturesFrom(_index, h).length; i++) {
-          var pic = manager.getPicturesFrom(_index, h)[i];
-          tiles.add(
-              StaggeredTile.count(
-                  pic.width,
-                  pic.height
-              )
-          );
-        }
+      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
+        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
+        tiles.add(
+            StaggeredTile.count(
+                pic.width,
+                pic.height
+            )
+        );
       }
     } else {
       for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
