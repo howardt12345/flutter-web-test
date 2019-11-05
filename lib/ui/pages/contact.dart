@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
@@ -159,22 +160,29 @@ class _ContactPageState extends State<ContactPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contact.keys.map((c) =>
-          Row(
-            children: <Widget>[
-              Container(
-                child: Icon(
-                  iconMapping[c],
-                  size: 16,
+          GestureDetector(
+            onTap: () {
+              if(c == 'email'){
+                html.window.open('mailto:${contact[c]}', '${Random.secure().nextInt(1000000000)}');
+              }
+            },
+            child: Row(
+              children: <Widget>[
+                Container(
+                  child: Icon(
+                    iconMapping[c],
+                    size: 16,
+                  ),
+                  padding: EdgeInsets.only(right: 8.0),
                 ),
-                padding: EdgeInsets.only(right: 8.0),
-              ),
-              RichText(
-                text: TextSpan(
-                  text: contact[c],
-                  style: Theme.of(context).textTheme.body1,
-                ),
-              )
-            ],
+                RichText(
+                  text: TextSpan(
+                    text: contact[c],
+                    style: Theme.of(context).textTheme.body1,
+                  ),
+                )
+              ],
+            ),
           )
       ).toList(),
     );
