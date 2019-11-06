@@ -90,6 +90,16 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              leading: IconButton(
+                onPressed: () {
+                  _scaffoldKey.currentState.openDrawer();
+                },
+                icon: Icon(
+                  Icons.menu,
+                  size: 24,
+                  color: Theme.of(context).textTheme.body2.color,
+                ),
+              ),
               floating: true,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               title: _buildIconDrawer(),
