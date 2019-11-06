@@ -21,6 +21,7 @@ class PortfolioPage extends StatefulWidget {
 class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  ScrollController _scrollController = ScrollController();
 
   AnimationController _animController;
   int _index = 0, _subindex = 0;
@@ -155,6 +156,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               ),
             ),
             StaggeredGridView.count(
+              controller: _scrollController,
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               crossAxisCount: portrait ? 4 : 12,
@@ -189,6 +191,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               icon: Icon(
                 Icons.menu,
                 size: 24,
+                color: Theme.of(context).textTheme.body2.color,
               ),
             )] + manager.getCategories().map((c) {
               return IconButton(
