@@ -86,11 +86,18 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
         child: _buildFullDrawer(),
       ),
       body: Container(
-        child: Row(
-          children: <Widget>[
-            _buildIconDrawer(),
-            Expanded(
-              child: _buildViewer(true),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              floating: true,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              title: _buildIconDrawer(),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                _buildViewer(true)
+              ]),
             ),
           ],
         ),
@@ -116,7 +123,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   _buildViewer(bool portrait) {
     return Align(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.centerLeft,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -150,7 +157,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
             StaggeredGridView.count(
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
-              crossAxisCount: portrait ? 8 : 12,
+              crossAxisCount: portrait ? 4 : 12,
               staggeredTiles: _getTiles(),
               children: _getWidgets(),
               mainAxisSpacing: 4.0,
@@ -166,19 +173,14 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
 
   _buildIconDrawer() {
     return Container(
-      width: 56.0,
+      height: 56.0,
       decoration: BoxDecoration(
-          border: Border(
-              right: BorderSide(
-                  width: 1.0,
-                  color: Theme.of(context).textTheme.title.color
-              )
-          )
       ),
       child: GestureDetector(
         child: Align(
-          alignment: Alignment.topCenter,
+          alignment: Alignment.centerLeft,
           child: ListView(
+            scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             children: [IconButton(
               onPressed: () {
