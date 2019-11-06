@@ -13,6 +13,8 @@ Map<String, IconData> iconMapping = {
   'email': Icons.email,
   'school': Icons.school,
   'location': Icons.location_on,
+  'events': Icons.event,
+  'travel': Icons.card_travel,
 };
 
 class PictureManager {

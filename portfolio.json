@@ -1,6 +1,60 @@
 {
     "categories": [
         {
+            "category": "Events",
+            "icon": "events",
+            "subcategories": [
+                {
+                    "name": "uO DSC",
+                    "images": [
+                        {
+                            "title": "",
+                            "width": 4,
+                            "height": 5,
+                            "description": "temp",
+                            "buy": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "VBS 2019",
+                    "images": [
+                        {
+                            "title": "",
+                            "width": 4,
+                            "height": 5,
+                            "description": "temp",
+                            "buy": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Chem Club 2018-2019",
+                    "images": [
+                        {
+                            "title": "",
+                            "width": 4,
+                            "height": 5,
+                            "description": "temp",
+                            "buy": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Miscellaneous",
+                    "images": [
+                        {
+                            "title": "",
+                            "width": 4,
+                            "height": 5,
+                            "description": "temp",
+                            "buy": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "category": "Nature",
             "icon": "nature",
             "subcategories": [
@@ -125,6 +179,24 @@
                     "height": 3,
                     "description": "temp",
                     "buy": ""
+                }
+            ]
+        },
+        {
+            "category": "Travel",
+            "icon": "travel",
+            "subcategories": [
+                {
+                    "name": "Taiwan 2018",
+                    "images": [
+                        {
+                            "title": "",
+                            "width": 4,
+                            "height": 5,
+                            "description": "temp",
+                            "buy": ""
+                        }
+                    ]
                 }
             ]
         }

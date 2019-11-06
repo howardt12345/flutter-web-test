@@ -10,8 +10,9 @@ import 'package:transparent_image/transparent_image.dart';
 import 'home.dart';
 
 
-// ignore: must_be_immutable
 class PortfolioPage extends StatefulWidget {
+
+  PortfolioPage();
 
   @override
   _PortfolioPageState createState() => _PortfolioPageState();
@@ -281,7 +282,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 36 : 0,
+            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 34 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
               children: manager.getSubcategoriesFrom(index).map((s) {
