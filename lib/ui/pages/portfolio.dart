@@ -7,6 +7,7 @@ import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'home.dart';
@@ -102,7 +103,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                   color: Theme.of(context).textTheme.body2.color,
                 ),
               ),
-              floating: true,
+              pinned: true,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               title: _buildIconDrawer(),
             ),
@@ -449,7 +450,8 @@ class _ImageTile extends StatelessWidget {
 }
 
 class _DetailScreen extends StatefulWidget {
-  final pic, url, token;
+  final Picture pic;
+  final String url, token;
 
   _DetailScreen({
     this.pic,
@@ -488,13 +490,18 @@ class __DetailScreenState extends State<_DetailScreen> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Hero(
-                    tag: '${widget.pic.path}/${widget.pic.title}',
-                    child: FadeInImage.memoryNetwork(
-                      fit: BoxFit.fitWidth,
-                      alignment: Alignment.center,
-                      placeholder: kTransparentImage,
-                      image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                  child: ClipRect(
+                    child: PhotoView(
+                      backgroundDecoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor
+                      ),
+                      imageProvider: NetworkImage(
+                        '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                      ),
+                      maxScale: PhotoViewComputedScale.covered * 2.0,
+                      minScale: PhotoViewComputedScale.contained,
+                      initialScale: PhotoViewComputedScale.contained,
+                      heroAttributes: PhotoViewHeroAttributes(tag: '${widget.pic.path}/${widget.pic.title}'),
                     ),
                   ),
                 ),
@@ -503,23 +510,40 @@ class __DetailScreenState extends State<_DetailScreen> {
           ),
         ),
         expandableCard: ExpandableCard(
+          hasHandle: false,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          minHeight: 100,
+          minHeight: 56,
           hasShadow: false,
           children: <Widget>[
             Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                IconBarButton(
-                  url: widget.pic.buy,
-                  iconData: iconMapping['download'],
+                Container(
+                  height: 24,
+                  child: widget.pic.download.isNotEmpty
+                    ? IconBarButton(
+                        url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.download.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                        iconData: iconMapping['download'],
+                      )
+                    : null,
                 ),
                 Expanded(
-                  child: Container(),
+                  child: Container(
+                    child: Icon(
+                      Icons.remove,
+                      color: Theme.of(context).textTheme.body1.color,
+                      size: 24,
+                    ),
+                  ),
                 ),
-                IconBarButton(
-                  url: widget.pic.buy,
-                  iconData: iconMapping['buy'],
+                Container(
+                  height: 24,
+                  child: widget.pic.buy.isNotEmpty
+                  ? IconBarButton(
+                    url: widget.pic.buy,
+                    iconData: iconMapping['buy'],
+                    )
+                  : null,
                 ),
               ],
             ),
