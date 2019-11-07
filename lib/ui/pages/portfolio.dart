@@ -401,6 +401,7 @@ class _ImageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(1.0),
       child: new GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -411,29 +412,23 @@ class _ImageTile extends StatelessWidget {
             );
           }));
         },
-        child: new Container(
-          decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.all(const Radius.circular(20.0)),
-          ),
-          padding: EdgeInsets.all(1.0),
-          child: Stack(
-            children: [
-              Center(child: CircularProgressIndicator()),
-              Center(
-                child: Hero(
-                  tag: '${pic.path}/${pic.title}',
-                  child: FadeInImage.memoryNetwork(
-                    fit: BoxFit.cover,
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    placeholder: kTransparentImage,
-                    image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token',
-                  ),
+        child: Stack(
+          children: [
+            Center(child: CircularProgressIndicator()),
+            Center(
+              child: Hero(
+                tag: '${pic.path}/${pic.title}',
+                child: FadeInImage.memoryNetwork(
+                  fit: BoxFit.cover,
+                  height: double.infinity,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  placeholder: kTransparentImage,
+                  image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token',
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
