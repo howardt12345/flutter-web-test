@@ -400,8 +400,7 @@ class _ImageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(1.0),
+    return Card(
       child: new GestureDetector(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (_) {
