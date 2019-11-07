@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:expandable_card/expandable_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_test/ui/components/icon_bar.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
@@ -472,20 +474,69 @@ class __DetailScreenState extends State<_DetailScreen> {
   _buildVerticalLayout() {
     print("vertical");
     return GestureDetector(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: Stack(
-          children: [
-            Center(child: CircularProgressIndicator()),
-            Hero(
-              tag: '${widget.pic.path}/${widget.pic.title}',
-              child: FadeInImage.memoryNetwork(
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.center,
-                placeholder: kTransparentImage,
-                image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+      child: ExpandableCardPage(
+        page: Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width * 5 / 4,
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Hero(
+                    tag: '${widget.pic.path}/${widget.pic.title}',
+                    child: FadeInImage.memoryNetwork(
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.center,
+                      placeholder: kTransparentImage,
+                      image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        expandableCard: ExpandableCard(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          minHeight: 100,
+          hasShadow: false,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                IconBarButton(
+                  url: widget.pic.buy,
+                  iconData: iconMapping['download'],
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                IconBarButton(
+                  url: widget.pic.buy,
+                  iconData: iconMapping['buy'],
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 24.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: RichText(
+                  text: TextSpan(
+                    text: widget.pic.description,
+                    style: Theme.of(context).textTheme.body1.copyWith(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -6,13 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Map<String, IconData> iconMapping = {
+  'buy': Icons.add_shopping_cart,
+  'download': Icons.file_download,
+
+  'email': Icons.email,
+  'school': Icons.school,
+  'location': Icons.location_on,
+
   'landscape': Icons.landscape,
   'portraits': Icons.portrait,
   'nature': Icons.nature_people,
   'misc': Icons.more_horiz,
-  'email': Icons.email,
-  'school': Icons.school,
-  'location': Icons.location_on,
   'events': Icons.event,
   'travel': Icons.card_travel,
 };
@@ -105,7 +109,7 @@ class PictureManager {
 }
 
 class Picture {
-  final String title, path, description, buy;
+  final String title, path, description, buy, download;
   final int width;
   final double height;
 
@@ -116,6 +120,7 @@ class Picture {
     this.height,
     this.description,
     this.buy,
+    this.download
   });
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
@@ -124,6 +129,7 @@ class Picture {
     height: json['height'],
     description: json['description'],
     buy: json['buy'],
+    download: json['download'],
     path: path,
   );
 }
