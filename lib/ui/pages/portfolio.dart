@@ -86,34 +86,25 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   _buildVerticalLayout() {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
+          icon: Icon(
+            Icons.menu,
+            size: 24,
+            color: Theme.of(context).textTheme.body2.color,
+          ),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: _buildIconDrawer(),
+      ),
       drawer: Drawer(
         child: _buildFullDrawer(),
       ),
-      body: Container(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              leading: IconButton(
-                onPressed: () {
-                  _scaffoldKey.currentState.openDrawer();
-                },
-                icon: Icon(
-                  Icons.menu,
-                  size: 24,
-                  color: Theme.of(context).textTheme.body2.color,
-                ),
-              ),
-              pinned: true,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              title: _buildIconDrawer(),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                _buildViewer(true)
-              ]),
-            ),
-          ],
-        ),
+      body: SingleChildScrollView(
+        child: _buildViewer(true),
       ),
     );
   }
@@ -490,19 +481,17 @@ class __DetailScreenState extends State<_DetailScreen> {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: ClipRect(
-                    child: PhotoView(
-                      backgroundDecoration: BoxDecoration(
+                  child: PhotoView(
+                    backgroundDecoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor
-                      ),
-                      imageProvider: NetworkImage(
-                        '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
-                      ),
-                      maxScale: PhotoViewComputedScale.covered * 2.0,
-                      minScale: PhotoViewComputedScale.contained,
-                      initialScale: PhotoViewComputedScale.contained,
-                      heroAttributes: PhotoViewHeroAttributes(tag: '${widget.pic.path}/${widget.pic.title}'),
                     ),
+                    imageProvider: NetworkImage(
+                      '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                    ),
+                    maxScale: PhotoViewComputedScale.covered * 2.0,
+                    minScale: PhotoViewComputedScale.contained,
+                    initialScale: PhotoViewComputedScale.contained,
+                    heroAttributes: PhotoViewHeroAttributes(tag: '${widget.pic.path}/${widget.pic.title}'),
                   ),
                 ),
               ],
