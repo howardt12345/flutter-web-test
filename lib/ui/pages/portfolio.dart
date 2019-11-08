@@ -504,6 +504,7 @@ class __DetailScreenState extends State<_DetailScreen> {
               children: <Widget>[
                 Container(
                   height: 24,
+                  width: 24,
                   child: widget.pic.download.isNotEmpty
                     ? IconBarButton(
                         url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.download.replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
@@ -522,6 +523,7 @@ class __DetailScreenState extends State<_DetailScreen> {
                 ),
                 Container(
                   height: 24,
+                  width: 24,
                   child: widget.pic.buy.isNotEmpty
                   ? IconBarButton(
                     url: widget.pic.buy,
