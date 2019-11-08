@@ -40,7 +40,7 @@ class PictureManager {
 
       Map<String, List<Picture>> subTmp = Map<String, List<Picture>>();
 
-      subTmp['icon'] = [Picture(title: iconName)];
+      subTmp['icon'] = [Picture(title: iconName, time: DateTime.now())];
 
       if(category['subcategories'].length != 0) {
         List<dynamic> subcategories = category['subcategories'];
@@ -49,16 +49,20 @@ class PictureManager {
           List<dynamic> images = subcategory['images'];
           List<Picture> pictures = [];
           images.forEach((image) {
+            print(image);
             pictures.add(Picture.fromJson(image, '$categoryName/$subcategoryName'));
           });
+          pictures.sort((a,b) => b.time.compareTo(a.time));
           subTmp[subcategoryName] = pictures;
           subTmp['icon'].addAll(pictures);
         });
       } else {
         List<dynamic> images = category['images'];
         images.forEach((image) {
+          print(image);
           subTmp['icon'].add(Picture.fromJson(image, '$categoryName'));
         });
+        subTmp['icon'].sort((a,b) => b.time.compareTo(a.time));
       }
 
       tmpMenu[categoryName] = subTmp;
@@ -96,14 +100,26 @@ class PictureManager {
   List<Picture> getPicturesFrom(int category, int subcategory)
     => menu[menu.keys.toList()[category]][menu[menu.keys.toList()[category]].keys.toList()[subcategory]];
 
-  List<Picture> getAllPictures(String category) {
+  List<Picture> getAllPicturesAt(String category) {
     List<Picture> tmp = [];
     menu[category].values.map((s) => tmp.addAll(s));
+    tmp.sort((a,b) => b.time.compareTo(a.time));
     return tmp;
   }
   List<Picture> getAllPicturesFrom(int index) {
     List<Picture> tmp = [];
     menu[menu.keys.toList()[index]].values.map((s) => tmp.addAll(s));
+    tmp.sort((a,b) => b.time.compareTo(a.time));
+    return tmp;
+  }
+  List<Picture> getAllPictures() {
+    List<Picture> tmp = [];
+    for(var h = 0; h < menu.keys.toList().length; h++) {
+      for(var i = 1; i < getPictures(getCategory(h), 'icon').length; i++) {
+        tmp.add(getPictures(getCategory(h), 'icon')[i]);
+      }
+    }
+    tmp.sort((a,b) => b.time.compareTo(a.time));
     return tmp;
   }
 }
@@ -112,6 +128,7 @@ class Picture {
   final String title, path, description, buy, download;
   final int width;
   final double height;
+  final DateTime time;
 
   Picture({
     this.path,
@@ -120,7 +137,8 @@ class Picture {
     this.height,
     this.description,
     this.buy,
-    this.download
+    this.download,
+    this.time,
   });
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
@@ -130,6 +148,7 @@ class Picture {
     description: json['description'],
     buy: json['buy'],
     download: json['download'],
+    time: json['time'] != '' ? DateTime.parse(json['time']) : DateTime.utc(1989, 11, 9),
     path: path,
   );
 }

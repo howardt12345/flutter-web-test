@@ -86,34 +86,25 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   _buildVerticalLayout() {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        elevation: 0.0,
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
+          icon: Icon(
+            Icons.menu,
+            size: 24,
+            color: Theme.of(context).textTheme.body2.color,
+          ),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: _buildIconDrawer(),
+      ),
       drawer: Drawer(
         child: _buildFullDrawer(),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            elevation: 0.0,
-            leading: IconButton(
-              onPressed: () {
-                _scaffoldKey.currentState.openDrawer();
-              },
-              icon: Icon(
-                Icons.menu,
-                size: 24,
-                color: Theme.of(context).textTheme.body2.color,
-              ),
-            ),
-            floating: true,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: _buildIconDrawer(),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              _buildViewer(true)
-            ]),
-          )
-        ]
-      )
+      body: _buildViewer(true)
     );
   }
   _buildHorizontalLayout() {
@@ -148,20 +139,20 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                 padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: RichText(
                   text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: manager.getCategories()[_index],
-                          style: Theme.of(context).textTheme.body1.copyWith(
-                            fontSize: 40,
-                          ),
+                    children: [
+                      TextSpan(
+                        text: manager.getCategories()[_index],
+                        style: Theme.of(context).textTheme.body1.copyWith(
+                          fontSize: 40,
                         ),
-                        TextSpan(
-                          text: ": ${_subindex == 0 ? "All" : manager.getSubcategoriesFrom(_index)[_subindex]}",
-                          style: Theme.of(context).textTheme.body1.copyWith(
-                            fontSize: 20,
-                          ),
+                      ),
+                      TextSpan(
+                        text: ": ${_subindex == 0 ? "All" : manager.getSubcategoriesFrom(_index)[_subindex]}",
+                        style: Theme.of(context).textTheme.body1.copyWith(
+                          fontSize: 20,
                         ),
-                      ]
+                      ),
+                    ]
                   ),
                 ),
               ),
@@ -579,7 +570,7 @@ class __DetailScreenState extends State<_DetailScreen> {
             Align(
               alignment: AlignmentDirectional(-0.5, 0),
               child: Hero(
-                tag: widget.pic.path,
+                tag: '${widget.pic.path}/${widget.pic.title}',
                 child: FadeInImage.memoryNetwork(
                   fit: BoxFit.fill,
                   alignment: Alignment.center,
