@@ -117,36 +117,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         icon: Icon(
             CustomIcons.facebook_squared
         ),
-        onPressed: () =>
-            html.window.open(
-                "https://www.facebook.com/howardt12345page",
-                "Facebook"),
+        onPressed: () => openUrl("https://www.facebook.com/howardt12345page"),
       ),
       IconButton(
         icon: Icon(
             CustomIcons.instagram
         ),
-        onPressed: () =>
-            html.window.open(
-                "https://www.instagram.com/howardt12345",
-                "Instagram"),
+        onPressed: () => openUrl("https://www.instagram.com/howardt12345"),
       ),
       IconButton(
         icon: Icon(
             CustomIcons.github_circled
         ),
-        onPressed: () =>
-            html.window.open(
-                "https://www.github.com/howardt12345", "Github"),
+        onPressed: () => openUrl("https://www.github.com/howardt12345"),
       ),
       IconButton(
         icon: Icon(
             CustomIcons.linkedin_squared
         ),
-        onPressed: () =>
-            html.window.open(
-                "https://www.linkedin.com/in/howardt12345",
-                "Linkedin"),
+        onPressed: () => openUrl("https://www.linkedin.com/in/howardt12345"),
       ),
     ],
   );
@@ -181,6 +170,13 @@ buildIconBar() => Row(
       child: IconBarButton(
         iconData: CustomIcons.linkedin_squared,
         url: "https://www.linkedin.com/in/howardt12345",
+      ),
+    ),
+    Padding(
+      padding: EdgeInsets.all(12.0),
+      child: IconBarButton(
+        iconData: CustomIcons.redbubble,
+        url: "http://howardt12345.redbubble.com/",
       ),
     ),
   ],

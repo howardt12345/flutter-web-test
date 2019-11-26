@@ -1,8 +1,9 @@
+
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:html' as html;
-import 'dart:math';
+import 'package:flutter_web_test/utils/functions.dart';
 
 class IconBarButton extends StatefulWidget {
   const IconBarButton({Key key, this.url, this.iconData}) : super(key: key);
@@ -18,7 +19,7 @@ class _IconBarButtonState extends State<IconBarButton> {
   Color _color = Colors.black;
 
   void _onTap() {
-    html.window.open(widget.url, '${Random.secure().nextInt(1000000000)}');
+    openUrl(widget.url);
   }
 
   void _changeButtonColor(Color color) {

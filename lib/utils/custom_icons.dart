@@ -24,6 +24,7 @@ class CustomIcons {
 
   static const _kFontFam = 'CustomIcons';
 
+  static const IconData redbubble = const IconData(0xe800, fontFamily: _kFontFam);
   static const IconData github_circled = const IconData(0xf09b, fontFamily: _kFontFam);
   static const IconData youtube_play = const IconData(0xf16a, fontFamily: _kFontFam);
   static const IconData instagram = const IconData(0xf16d, fontFamily: _kFontFam);

@@ -1,15 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'package:http/http.dart' as http;
-import 'dart:html' as html;
-
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -163,7 +158,7 @@ class _ContactPageState extends State<ContactPage> {
           GestureDetector(
             onTap: () {
               if(c == 'email'){
-                html.window.open('mailto:${contact[c]}', '${Random.secure().nextInt(1000000000)}');
+                openUrl('mailto:${contact[c]}');
               }
             },
             child: Row(

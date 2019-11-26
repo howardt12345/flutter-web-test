@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 import 'package:flutter_web_test/utils/list_animation.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'dart:html' as html;
 
@@ -166,9 +168,9 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contact.keys.map((c) =>
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               if(c == 'email'){
-                html.window.open('mailto:${contact[c]}', '${Random.secure().nextInt(1000000000)}');
+                openUrl('mailto:${contact[c]}');
               }
             },
             child: Row(
