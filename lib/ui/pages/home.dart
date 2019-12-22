@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   _buildTitle(bool isPortrait) => RichText(
     text: TextSpan(
-      text: "Hi, I'm Howard!",
+      text: "test",
       style: Theme.of(context).textTheme.title.copyWith(
           fontSize: isPortrait ? 46 : 56
       ),
