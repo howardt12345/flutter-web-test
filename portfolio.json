@@ -104,7 +104,12 @@
                             "height": 5,
                             "description": "temp",
                             "buy": "https://www.redbubble.com/people/howardt12345/works/42317259-leaf-on-ground-at-sunrise?asc=u&ref=recent-owner"
-                        },
+                        }
+                    ]
+                },
+                {
+                    "name": "Miscellaneous",
+                    "images": [
                         {
                             "title": "(Canon EOS 7D Mark II) 2019_05_11 10_20_43-Edited (Web)_.jpg",
                             "download": "",
@@ -122,12 +127,7 @@
                             "height": 3,
                             "description": "temp",
                             "buy": ""
-                        }
-                    ]
-                },
-                {
-                    "name": "Miscellaneous",
-                    "images": [
+                        },
                         {
                             "title": "(Canon EOS 7D Mark II) 2019_05_11 10_27_51-Edited (Web)_.jpg",
                             "download": "",
