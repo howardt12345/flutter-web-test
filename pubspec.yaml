@@ -22,6 +22,7 @@ dependencies:
 
   bubble_tab_indicator: any
   expandable_card: any
+  flutter_scroll_gallery: any
   flutter_sidekick: any
   flutter_staggered_grid_view: any
   http: any

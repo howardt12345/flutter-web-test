@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_scroll_gallery/flutter_scroll_gallery.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/ui/components/scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -20,6 +21,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   ItemPositionsListener itemPositionListener = ItemPositionsListener.create();
 
   ScrollController _scrollController = ScrollController();
+  PageController _pageController = PageController();
 
   PictureManager manager;
 
@@ -63,8 +65,13 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
           alignment: Alignment.center,
           child: Container(
             height: screenHeight(context: context) - 56,
-            width: 1000,
-            child: _first ? _buildTilesViewer() : _buildViewer(),
+            width: 900,
+            child: AnimatedCrossFade(
+              crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              firstChild: _buildTilesViewer(),
+              secondChild: _buildViewer(),
+              duration: Duration(milliseconds: 100),
+            ),
           ),
         )
     );
@@ -84,29 +91,54 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   }
 
   _buildViewer() {
-    var pic = manager.getPicturesFrom(_index, _subindex)[_currentPic];
+    _pageController = PageController(initialPage: _subindex == 0 ? _currentPic+1 : _currentPic);
     var thumbnails = _getWidgets(true);
+    var children = thumbnails.length;
+    for(int i = 0; i < (5 + (_subindex == 0 ? 1 : 0)); i++) {
+      thumbnails.insert(0, Container(width: 80, height: 80,));
+    }
+    for(int i = 0; i < 5; i++) {
+      thumbnails.add(Container(width: 80, height: 80,));
+    }
     return Stack(
       children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Sidekick(
-              tag: '${pic.path}/${pic.title}-target',
-              child: FadeInImage.memoryNetwork(
-                height: screenHeight(context: context) - 200 - 56,
-                fit: BoxFit.fill,
-                alignment: Alignment.center,
-                placeholder: kTransparentImage,
-                image: '${manager.url}${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=${manager.token}',
+            Container(
+              height: screenHeight(context: context) - 80 - 56,
+              width: 900,
+              child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: children,
+                  itemBuilder: (context, index) {
+                    var pic = manager.getPicturesFrom(_index, _subindex)[_subindex == 0 ? index+1 : index];
+                    return Card(
+                      elevation: 0,
+                      child: FadeInImage.memoryNetwork(
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        placeholder: kTransparentImage,
+                        image: '${manager.url}${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=${manager.token}',
+                      ),
+                    );
+                  },
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPic = index;
+                    _first = false;
+                  });
+                  itemScrollController.scrollTo(index: _currentPic, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+                },
               ),
             ),
             Container(
-              height: 100,
-              width: 1000,
+              height: 80,
+              width: 900,
               child: Align(
                 alignment: Alignment.center,
                 child: ScrollablePositionedList.builder(
+                  initialScrollIndex:  _currentPic,
                   scrollDirection: Axis.horizontal,
                   itemCount: thumbnails.length,
                   itemBuilder: (context, index) => thumbnails[index],
@@ -149,13 +181,14 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
             token: manager.token,
             onTap: () {
               setState(() {
-                _currentPic = i;
+                _currentPic = i-1;
                 _first = false;
               });
-              itemScrollController.scrollTo(index: i-1, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+              itemScrollController.scrollTo(index: _currentPic, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+              _pageController.animateToPage(_currentPic, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
             },
             thumbnail: thumbnail,
-            selected: i == _currentPic,
+            selected: i-1 == _currentPic,
           )
         );
       }
@@ -167,26 +200,21 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
             '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
             '${manager.token}');
         widgets.add(
-          _ImageTile(
-            pic: pic,
-            url: manager.url,
-            token: manager.token,
-            onTap: () {
-              _sidekickController.moveToTarget(context);
-              itemScrollController.scrollTo(
-                index: i,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.easeOut,
-                alignment: 1
-              );
-              setState(() {
-                _currentPic = i;
-                _first = false;
-              });
-            },
-            thumbnail: thumbnail,
-            selected: i == _currentPic,
-          )
+            _ImageTile(
+              pic: pic,
+              url: manager.url,
+              token: manager.token,
+              onTap: () {
+                setState(() {
+                  _currentPic = i;
+                  _first = false;
+                });
+                itemScrollController.scrollTo(index: _currentPic, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+                _pageController.animateToPage(_currentPic, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+              },
+              thumbnail: thumbnail,
+              selected: i == _currentPic,
+            )
         );
       }
     }
@@ -260,14 +288,14 @@ class _ImageTile extends StatelessWidget {
             Center(
               child: Image.asset(
                 '/images/logo_dark.png',
-                width: thumbnail ? 75 : 125,
-                height: thumbnail ? 75 : 125,
+                width: thumbnail ? 60 : 125,
+                height: thumbnail ? 60 : 125,
               ),
             ),
             Center(
               child: SizedBox(
-                width: thumbnail ? 15 : 25,
-                height: thumbnail ? 15 : 25,
+                width: thumbnail ? 12 : 25,
+                height: thumbnail ? 12 : 25,
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
                 ),
@@ -279,8 +307,8 @@ class _ImageTile extends StatelessWidget {
                 targetTag: '${pic.path}/${pic.title}-target',
                 child: FadeInImage.memoryNetwork(
                   fit: BoxFit.cover,
-                  height: thumbnail ? 100 : double.infinity,
-                  width: thumbnail ? 100 : double.infinity,
+                  height: thumbnail ? 80 : double.infinity,
+                  width: thumbnail ? 80 : double.infinity,
                   alignment: Alignment.center,
                   placeholder: kTransparentImage,
                   image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token',
