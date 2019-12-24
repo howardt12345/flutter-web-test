@@ -69,10 +69,13 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           );
         } else if(snapshot.connectionState == ConnectionState.done){
           return OrientationBuilder(
-            builder: (context, orientation) =>
-            (orientation == Orientation.portrait || _screenSize <= 600)
-                ? _buildVerticalLayout()
-                : _buildHorizontalLayout(),
+            builder: (context, orientation) => Container(
+              height: screenHeight(context: context),
+              width: screenWidth(context: context),
+              child: (/*orientation == Orientation.portrait || */_screenSize <= 600)
+                  ? _buildVerticalLayout()
+                  : _buildHorizontalLayout(),
+            ),
           );
         } else {
           return Center(
@@ -158,10 +161,11 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               ),
             ),
             StaggeredGridView.count(
+              scrollDirection: Axis.horizontal,
               controller: _scrollController,
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
-              crossAxisCount: portrait ? 4 : 12,
+              crossAxisCount: 12,
               staggeredTiles: _getTiles(),
               children: _getWidgets(),
               mainAxisSpacing: 4.0,
@@ -246,12 +250,12 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 16.0),
+                      SizedBox(height: 8.0),
                       Text(
                         item,
                         textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.body1.copyWith(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153)
                         ),
@@ -280,7 +284,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 34 : 0,
+            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 36 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
               children: manager.getSubcategoriesFrom(index).map((s) {

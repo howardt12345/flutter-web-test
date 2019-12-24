@@ -20,7 +20,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  bubble_tab_indicator: any
   expandable_card: any
+  flutter_sidekick: any
   flutter_staggered_grid_view: any
   http: any
   mailer: any
@@ -79,6 +81,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - images/logo.png
+
   fonts:
     - family: Roboto
       fonts:

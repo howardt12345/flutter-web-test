@@ -15,6 +15,7 @@ import 'dart:html' as html;
 import 'home.dart';
 
 class AboutPage extends StatefulWidget {
+
   @override
   _AboutPageState createState() => _AboutPageState();
 }
@@ -86,7 +87,7 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
         } else if(snapshot.connectionState == ConnectionState.done){
           return OrientationBuilder(
             builder: (context, orientation) =>
-            (orientation == Orientation.portrait || _screenSize <= 600)
+            (/*orientation == Orientation.portrait || */_screenSize <= 600)
                 ? _buildVerticalLayout()
                 : _buildHorizontalLayout(),
           );
@@ -109,7 +110,6 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
             _buildContactInfo(),
             _buildAboutInfo(),
             buildIconBar(),
-            buildCopyrightText(),
           ],
         ),
       ),
@@ -118,43 +118,28 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
 
   _buildHorizontalLayout() {
     return Align(
-      alignment: Alignment.topCenter,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
         width: 800,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(height: 56.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildTitle(false),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: _buildContactInfo(),
-                  ),
-                ],
-              ),
-              Container(height: 8.0),
-              _buildAboutInfo(),
-              buildIconBar(),
-              buildCopyrightText(),
-            ],
-          ),
+        child: Column(
+          children: <Widget>[
+            Container(height: 56.0),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: _buildTitle(false),
+            ),
+            Container(height: 8.0),
+            _buildAboutInfo(),
+          ],
         ),
       ),
     );
   }
   _buildTitle(bool isPortrait) => Container(
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: RichText(
-        text: TextSpan(
-          text: "About Me",
-          style: Theme.of(context).textTheme.title.copyWith(
-              fontSize: isPortrait ? 46 : 56
-          ),
+    child: RichText(
+      text: TextSpan(
+        text: "About Me",
+        style: Theme.of(context).textTheme.title.copyWith(
+            fontSize: isPortrait ? 46 : 56
         ),
       ),
     ),
@@ -196,14 +181,12 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
   }
   
   _buildAboutInfo() {
-    return Container(
-      child: RichText(
-        textAlign: TextAlign.justify,
-        text: TextSpan(
-          text: _about,
-          style: Theme.of(context).textTheme.body1.copyWith(
-            fontSize: 20,
-          ),
+    return RichText(
+      textAlign: TextAlign.justify,
+      text: TextSpan(
+        text: _about,
+        style: Theme.of(context).textTheme.body1.copyWith(
+          fontSize: 20,
         ),
       ),
     );

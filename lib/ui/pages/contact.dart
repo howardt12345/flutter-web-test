@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
+import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'package:http/http.dart' as http;
@@ -80,6 +81,7 @@ class _ContactPageState extends State<ContactPage> {
                 ),
               ),
             ),
+            buildCopyrightText(),
           ],
         ),
       ),
@@ -127,7 +129,8 @@ class _ContactPageState extends State<ContactPage> {
                     ),
                   )
                 ],
-              )
+              ),
+              buildCopyrightText(),
             ],
           ),
         ),

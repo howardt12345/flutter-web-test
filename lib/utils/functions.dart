@@ -10,6 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 double screenWidth({BuildContext context}) {
   return MediaQuery.of(context).size.width;
 }
+double screenHeight({BuildContext context}) {
+  return MediaQuery.of(context).size.height;
+}
 
 openUrl(String url) async {
   try{

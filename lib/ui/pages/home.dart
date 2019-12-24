@@ -47,60 +47,79 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Widget _buildPage(BuildContext context, Widget child) {
+    bool isPortrait = (/*orientation == Orientation.portrait || */screenWidth(context: context) <= 600);
     return OrientationBuilder(
-      builder: (context, orientation) => Stack(
-        children: <Widget>[
-          Opacity(
-            opacity: _listAnimation.animations.map((a) => a.value * 1 / _listAnimation.animations.length).fold(0, (p, c) => p + c),
-            child: Image.network(
-              "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/Nature%2FLandscapes%2F(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=73c5f2d7-8409-4563-a46e-be2e22d28f67",
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-              alignment: Alignment.center,
+      builder: (context, orientation) => Container(
+        height: screenHeight(context: context) - (isPortrait ? 56 : 0),
+        width: screenWidth(context: context),
+        child: Stack(
+          children: <Widget>[
+            Opacity(
+              opacity: _listAnimation.animations.map((a) => a.value * 1 / _listAnimation.animations.length).fold(0, (p, c) => p + c),
+              child: Image.network(
+                "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/Nature%2FLandscapes%2F(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=73c5f2d7-8409-4563-a46e-be2e22d28f67",
+                fit: BoxFit.cover,
+                height: screenHeight(context: context),
+                width: screenWidth(context: context),
+                alignment: Alignment.center,
+              ),
             ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Transform.translate(
-                  offset: Offset(0, _offset + (-_listAnimation.animations[0].value * _offset)),
-                  child: Opacity(
-                    opacity: _listAnimation.animations[0].value,
-                    child: _buildTitle((orientation == Orientation.portrait || _screenSize <= 600)),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Transform.translate(
+                    offset: Offset(0, _offset + (-_listAnimation.animations[0].value * _offset)),
+                    child: Opacity(
+                      opacity: _listAnimation.animations[0].value,
+                      child: _buildTitle(isPortrait),
+                    ),
                   ),
-                ),
-                Transform.translate(
-                  offset: Offset(0, _offset + (-_listAnimation.animations[1].value * _offset)),
-                  child: Opacity(
-                    opacity: _listAnimation.animations[1].value,
-                    child: _buildSubtitle((orientation == Orientation.portrait || _screenSize <= 600)),
+                  Transform.translate(
+                    offset: Offset(0, _offset + (-_listAnimation.animations[1].value * _offset)),
+                    child: Opacity(
+                      opacity: _listAnimation.animations[1].value,
+                      child: _buildSubtitle(isPortrait),
+                    ),
                   ),
-                ),
-                Transform.translate(
-                  offset: Offset(0, _offset + (-_listAnimation.animations[2].value * _offset)),
-                  child: Opacity(
-                    opacity: _listAnimation.animations[2].value,
-                    child: buildIconBar(),
+                  Transform.translate(
+                    offset: Offset(0, _offset + (-_listAnimation.animations[2].value * _offset)),
+                    child: Opacity(
+                      opacity: _listAnimation.animations[2].value,
+                      child: buildIconBar(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   _buildTitle(bool isPortrait) => RichText(
     text: TextSpan(
-      text: "test",
+      text: "${screenWidth(context: context)} x ${screenHeight(context: context)} $isPortrait",
       style: Theme.of(context).textTheme.title.copyWith(
           fontSize: isPortrait ? 46 : 56
       ),
     ),
-  );
+  )/*Container(
+    height: 200,
+    width: 200,
+    child: Stack(
+      children: <Widget>[
+        Image.asset(
+          'images/logo.png',
+          color: Colors.black,
+        ),
+        Center(
+          child: CircularProgressIndicator(),
+        )
+      ],
+    ),
+  )*/;
   _buildSubtitle(bool isPortrait) => RichText(
     text: TextSpan(
       text: "An Engineer, Flutter Developer, and Photographer",
