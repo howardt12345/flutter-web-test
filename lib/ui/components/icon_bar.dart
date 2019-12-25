@@ -6,10 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 class IconBarButton extends StatefulWidget {
-  const IconBarButton({Key key, this.url, this.iconData}) : super(key: key);
+  const IconBarButton({
+    Key key,
+    this.url,
+    this.iconData,
+    this.onTap,
+  }) : super(key: key);
 
   final String url;
   final IconData iconData;
+  final Function onTap;
 
   @override
   _IconBarButtonState createState() => _IconBarButtonState();
@@ -19,7 +25,12 @@ class _IconBarButtonState extends State<IconBarButton> {
   Color _color = Colors.black;
 
   void _onTap() {
-    openUrl(widget.url);
+    if(widget.url != null) {
+      openUrl(widget.url);
+    }
+    if(widget.onTap != null) {
+      widget.onTap();
+    }
   }
 
   void _changeButtonColor(Color color) {

@@ -15,7 +15,7 @@ import 'components/scrollable_positioned_list/scrollable_positioned_list.dart';
 class Main extends StatefulWidget {
   int initialPage;
 
-  Main({this.initialPage});
+  Main({this.initialPage = 0});
 
 
   static Route<dynamic> homeRoute() {
@@ -143,7 +143,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       onTap: (index) {
         setState(() {
           selectedBarIndex = index;
-          itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+          itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 500), curve: Curves.easeInOutQuint);
         });
       },
     );
