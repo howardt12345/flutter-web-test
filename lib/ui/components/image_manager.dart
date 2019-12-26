@@ -12,6 +12,7 @@ Map<String, IconData> iconMapping = {
   'email': Icons.email,
   'school': Icons.school,
   'location': Icons.location_on,
+  'phone': Icons.phone,
 
   'landscape': Icons.landscape,
   'portraits': Icons.portrait,

@@ -135,44 +135,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
     ),
   );
-
-  _buildIconBarOld() => ButtonBar(
-    mainAxisSize: MainAxisSize.min,
-    children: <Widget>[
-      IconButton(
-        icon: Icon(
-            CustomIcons.facebook_squared
-        ),
-        onPressed: () => openUrl("https://www.facebook.com/howardt12345page"),
-      ),
-      IconButton(
-        icon: Icon(
-            CustomIcons.instagram
-        ),
-        onPressed: () => openUrl("https://www.instagram.com/howardt12345"),
-      ),
-      IconButton(
-        icon: Icon(
-            CustomIcons.github_circled
-        ),
-        onPressed: () => openUrl("https://www.github.com/howardt12345"),
-      ),
-      IconButton(
-        icon: Icon(
-            CustomIcons.linkedin_squared
-        ),
-        onPressed: () => openUrl("https://www.linkedin.com/in/howardt12345"),
-      ),
-    ],
-  );
 }
 
-buildIconBar() => Row(
+buildIconBar({bool hover = true}) => Row(
   mainAxisAlignment: MainAxisAlignment.center,
   children: <Widget>[
     Padding(
       padding: EdgeInsets.all(12.0),
       child: IconBarButton(
+        hover: hover,
         iconData: CustomIcons.facebook_squared,
         url: "https://www.facebook.com/howardt12345page",
       ),
@@ -180,6 +151,7 @@ buildIconBar() => Row(
     Padding(
       padding: EdgeInsets.all(12.0),
       child: IconBarButton(
+        hover: hover,
         iconData: CustomIcons.instagram,
         url: "https://www.instagram.com/howardt12345",
       ),
@@ -187,6 +159,7 @@ buildIconBar() => Row(
     Padding(
       padding: EdgeInsets.all(12.0),
       child: IconBarButton(
+        hover: hover,
         iconData: CustomIcons.github_circled,
         url: "https://www.github.com/howardt12345",
       ),
@@ -194,6 +167,7 @@ buildIconBar() => Row(
     Padding(
       padding: EdgeInsets.all(12.0),
       child: IconBarButton(
+        hover: hover,
         iconData: CustomIcons.linkedin_squared,
         url: "https://www.linkedin.com/in/howardt12345",
       ),
@@ -201,6 +175,7 @@ buildIconBar() => Row(
     Padding(
       padding: EdgeInsets.all(12.0),
       child: IconBarButton(
+        hover: hover,
         iconData: CustomIcons.redbubble,
         url: "http://howardt12345.redbubble.com/",
       ),

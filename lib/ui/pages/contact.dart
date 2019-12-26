@@ -99,7 +99,11 @@ class _ContactPageState extends State<ContactPage> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      child: buildIconInfoBar(),
+                      child: Column(
+                        children: <Widget>[
+                          buildIconBar(hover: false),
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: Column(
@@ -111,14 +115,12 @@ class _ContactPageState extends State<ContactPage> {
                           ),
                           Container(height: 12.0,),
                           Container(
-                            width: 300,
                             height: 350,
-                            color: Colors.green,
-                            /*child: EasyGoogleMaps(
-                            apiKey: 'AIzaSyCFHFzyeZZhepypQ_IypfDKiSxRLQA97GE',
-                            address: '240 Friel Street, Ottawa, Ontario',
-                            title: 'Location',
-                          ),*/
+                            child: EasyGoogleMaps(
+                              apiKey: 'AIzaSyCFHFzyeZZhepypQ_IypfDKiSxRLQA97GE',
+                              address: '240 Friel Street, Ottawa, Ontario',
+                              title: 'Location',
+                            ),
                           ),
                         ],
                       ),
@@ -151,7 +153,7 @@ class _ContactPageState extends State<ContactPage> {
                 Container(
                   child: Icon(
                     iconMapping[c],
-                    size: 16,
+                    size: 24,
                   ),
                   padding: EdgeInsets.only(right: 8.0),
                 ),

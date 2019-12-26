@@ -13,12 +13,14 @@ class IconBarButton extends StatefulWidget {
     this.iconData,
     this.onTap,
     this.color,
+    this.hover = true,
   }) : super(key: key);
 
   final String url;
   final IconData iconData;
   final Function onTap;
   final Color color;
+  final bool hover;
 
   @override
   _IconBarButtonState createState() => _IconBarButtonState();
@@ -48,11 +50,15 @@ class _IconBarButtonState extends State<IconBarButton> {
   }
 
   void _onPointerExit(PointerExitEvent event) {
-    _changeButtonColor(widget.color ?? Theme.of(context).textTheme.button.color);
+    if(widget.hover) {
+      _changeButtonColor(widget.color ?? Theme.of(context).textTheme.button.color);
+    }
   }
 
   void _onPointerHover(PointerHoverEvent event) {
-    _changeButtonColor(Theme.of(context).buttonColor);
+    if(widget.hover) {
+      _changeButtonColor(Theme.of(context).buttonColor);
+    }
   }
 
   @override
