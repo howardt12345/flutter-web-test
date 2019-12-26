@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_google_maps/easy_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/ui/pages/home.dart';
@@ -30,15 +31,12 @@ class _ContactPageState extends State<ContactPage> {
       data.keys.forEach((e) => contact[e] = data[e]);
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load about info');
+      throw Exception('Failed to load contact info');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      _screenSize = screenWidth(context: context);
-    });
     return FutureBuilder(
       future: _getContact('https://raw.githubusercontent.com/howardt12345/website/master/contact.json'),
       builder: (context, snapshot) {
@@ -49,7 +47,7 @@ class _ContactPageState extends State<ContactPage> {
         } else if(snapshot.connectionState == ConnectionState.done){
           return OrientationBuilder(
             builder: (context, orientation) =>
-            (orientation == Orientation.portrait || _screenSize <= 600)
+            (/*orientation == Orientation.portrait || */screenWidth(context: context) <= 600)
                 ? _buildVerticalLayout()
                 : _buildHorizontalLayout(),
           );
@@ -75,7 +73,6 @@ class _ContactPageState extends State<ContactPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    _buildTitle(true),
                     _buildContactInfo(),
                   ],
                 ),
@@ -95,62 +92,47 @@ class _ContactPageState extends State<ContactPage> {
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         width: 800,
         child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(height: 56.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _buildTitle(false),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: _buildContactInfo(),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Form(
-                      key: _formKey,
-                      autovalidate: _autovalidate,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-
-                          ],
-                        ),
+          child: Container(
+            width: 800,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: buildIconInfoBar(),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: _buildContactInfo(),
+                          ),
+                          Container(height: 12.0,),
+                          Container(
+                            width: 300,
+                            height: 350,
+                            color: Colors.green,
+                            /*child: EasyGoogleMaps(
+                            apiKey: 'AIzaSyCFHFzyeZZhepypQ_IypfDKiSxRLQA97GE',
+                            address: '240 Friel Street, Ottawa, Ontario',
+                            title: 'Location',
+                          ),*/
+                          ),
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
-              buildCopyrightText(),
-            ],
+                  ],
+                ),
+                buildCopyrightText(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  _buildTitle(bool isPortrait) => Container(
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: RichText(
-        text: TextSpan(
-          text: "Contact Me",
-          style: Theme.of(context).textTheme.title.copyWith(
-              fontSize: isPortrait ? 46 : 56
-          ),
-        ),
-      ),
-    ),
-  );
 
   _buildContactInfo() {
     return Column(

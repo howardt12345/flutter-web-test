@@ -21,7 +21,9 @@ dependencies:
     sdk: flutter
 
   bubble_tab_indicator: any
+  easy_google_maps: any
   expandable_card: any
+  flutter_parallax: any
   flutter_scroll_gallery: any
   flutter_sidekick: any
   flutter_staggered_grid_view: any

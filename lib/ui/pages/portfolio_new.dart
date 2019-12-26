@@ -1,14 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+
+
+import 'package:flutter_web_test/ui/components/drawer_stack.dart';
 import 'package:flutter_web_test/ui/components/icon_bar.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/ui/components/scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:flutter_web_test/utils/functions.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:flutter_sidekick/flutter_sidekick.dart';
 
+import 'package:flutter_web_test/utils/functions.dart';
+
+import 'package:flutter_sidekick/flutter_sidekick.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class PortfolioPage extends StatefulWidget {
   @override
@@ -56,7 +61,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
 
   Future<void> _initializeManager() async {
     manager = await PictureManager.fromUrl(
-      jsonUrl: "https://raw.githubusercontent.com/howardt12345/website/test/portfolio.json",
+      jsonUrl: "https://raw.githubusercontent.com/howardt12345/website/master/portfolio.json",
       url: "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/",
       token: "810d1310-0533-4e13-bc33-6fc77ac56ef1",
     );
@@ -65,7 +70,6 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-
     setState(() {
       _screenSize = screenWidth(context: context);
       _scaffoldKey = new GlobalKey();
@@ -74,8 +78,8 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
         builder: (context, orientation) => Container(
         height: screenHeight(context: context),
         width: screenWidth(context: context),
-        child: (/*orientation == Orientation.portrait || */_screenSize <= 900)
-            ? _buildVerticalLayout(context)
+        child: (/*orientation == Orientation.portrait || */_screenSize <= 950)
+            ? _buildVerticalLayout()
             : _buildHorizontalLayout(),
         )
     );
@@ -86,7 +90,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
       alignment: Alignment.center,
       child: Container(
         height: screenHeight(context: context) - 56,
-        width: 900,
+        width: 960,
         child: Row(
           children: <Widget>[
             Expanded(
@@ -94,11 +98,11 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
               child: _buildFullDrawer(),
             ),
             Container(
-              width: 675,
+              width: 725,
               child: AnimatedCrossFade(
                 crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                firstChild: _buildTilesViewer(),
-                secondChild: _buildImageViewer(width: 675),
+                firstChild: _buildTilesViewer(screenHeight(context: context) - 56),
+                secondChild: _buildImageViewer(width: 725),
                 duration: Duration(milliseconds: 100),
               ),
             ),
@@ -108,28 +112,86 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
     );
   }
 
-  _buildVerticalLayout(BuildContext context) {
-    return Container(
-      height: screenHeight(context: context) - 56,
-      width: _screenSize,
-      child: AnimatedCrossFade(
-        crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        firstChild: _buildTilesViewer(),
-        secondChild: _buildImageViewer(width: _screenSize),
-        duration: Duration(milliseconds: 100),
+  _buildVerticalLayout() {
+    return DrawerStack(
+      body: Builder(
+        builder: (context) => Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: <Widget>[
+              AppBar(
+                elevation: 0.0,
+                leading: IconBarButton(
+                  onTap: () {
+                    context.findAncestorWidgetOfExactType<DrawerStack>().openDrawer();
+                  },
+                  iconData: Icons.menu,
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                title: _buildIconDrawer(),
+              ),
+              Container(
+                height: screenHeight(context: context) - 56,
+                width: _screenSize,
+                child: AnimatedCrossFade(
+                  crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  firstChild: _buildTilesViewer(screenHeight(context: context) - 56),
+                  secondChild: _buildImageViewer(width: _screenSize),
+                  duration: Duration(milliseconds: 100),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      drawer: Drawer(
+        elevation: 0.0,
+        child: _buildFullDrawer(),
       ),
     );
   }
 
-  _buildTilesViewer() {
-    return StaggeredGridView.count(
-      crossAxisCount: 10,
-      scrollDirection: Axis.horizontal,
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      staggeredTiles: _getTiles(),
-      children: _getWidgets(false),
-      padding: const EdgeInsets.all(4.0),
+  _buildTilesViewer(double height) {
+    return Column(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            height: 56,
+            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: RichText(
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: manager.getCategories()[_index],
+                      style: Theme.of(context).textTheme.body1.copyWith(
+                        fontSize: 40,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ": ${_subindex == 0 ? "All" : manager.getSubcategoriesFrom(_index)[_subindex]}",
+                      style: Theme.of(context).textTheme.body1.copyWith(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ]
+              ),
+            ),
+          ),
+        ),
+        Container(
+          height: height - 56,
+          child: StaggeredGridView.count(
+            crossAxisCount: 10,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            staggeredTiles: _getTiles(),
+            children: _getWidgets(false),
+            padding: const EdgeInsets.all(4.0),
+          ),
+        ),
+      ],
     );
   }
 
@@ -298,8 +360,6 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   _buildIconDrawer() {
     return Container(
         height: 56.0,
-        decoration: BoxDecoration(
-        ),
         child: GestureDetector(
           child: Align(
             alignment: Alignment.centerLeft,
@@ -307,18 +367,19 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               children: manager.getCategories().map((c) {
-                return IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _index = manager.getCategories().indexOf(c);
-                      _subindex = 0;
-                      _first = true;
-                    });
-                  },
-                  icon: Icon(
-                    iconMapping[manager.getPictures(c, 'icon')[0].title],
+                return Container(
+                  width: 40,
+                  height: 40,
+                  child: IconBarButton(
+                    onTap: () {
+                      setState(() {
+                        _index = manager.getCategories().indexOf(c);
+                        _subindex = 0;
+                        _first = true;
+                      });
+                    },
+                    iconData: iconMapping[manager.getPictures(c, 'icon')[0].title],
                     color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
-                    size: 24,
                   ),
                 );
               }).toList(),
@@ -482,9 +543,9 @@ class _ImageTile extends StatelessWidget {
               child: SizedBox(
                 width: thumbnail ? size * 0.15 : 25,
                 height: thumbnail ? size * 0.15 : 25,
-                child: CircularProgressIndicator(
+                child: !thumbnail ? CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
-                ),
+                ) : null,
               )
             ),
             Center(
@@ -533,12 +594,32 @@ class __DetailCardState extends State<_DetailCard> {
           Center(
             child: AspectRatio(
               aspectRatio: widget.pic.width/widget.pic.height,
-              child: FadeInImage.memoryNetwork(
-                fit: BoxFit.contain,
-                alignment: Alignment.center,
-                placeholder: kTransparentImage,
-                image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title
-                    .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: Image.asset(
+                      '/images/logo_dark.png',
+                      width: 125,
+                      height: 125,
+                    ),
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 25,
+                      height: 25,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
+                      ),
+                    ),
+                  ),
+                  FadeInImage.memoryNetwork(
+                    fit: BoxFit.contain,
+                    alignment: Alignment.center,
+                    placeholder: kTransparentImage,
+                    image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title
+                        .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                  ),
+                ],
               ),
             ),
           ),

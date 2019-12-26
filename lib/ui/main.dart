@@ -1,4 +1,5 @@
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'dart:html' as html;
+
 import "package:flutter/material.dart";
 
 import 'package:flutter_web_test/ui/pages/about.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_web_test/utils/functions.dart';
 import 'package:flutter_web_test/utils/route.dart';
 
 import 'components/animated_tab_bar.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'components/scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class Main extends StatefulWidget {
@@ -53,6 +55,12 @@ class Main extends StatefulWidget {
     "Portfolio",
     "Contact",
   ];
+  final List<String> paths = [
+    "",
+    "about",
+    "portfolio",
+    "contact",
+  ];
   final List<Widget> pages = [
     HomePage(),
     AboutPage(),
@@ -70,8 +78,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
   ItemPositionsListener itemPositionListener = ItemPositionsListener.create();
   TabController _tabController;
 
-  double _screenSize = 0;
-  int selectedBarIndex;
+  int selectedBarIndex = 0;
 
   @override
   void initState() {
@@ -79,35 +86,41 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
     _tabController = TabController(length: widget.pages.length, vsync: this);
     selectedBarIndex = widget.initialPage;
     itemPositionListener.itemPositions.addListener(() async {
-      await Future.delayed(Duration(milliseconds: 200));
-        int min = itemPositionListener.itemPositions.value.where((ItemPosition position) => position.itemTrailingEdge > 0)
-            .reduce((ItemPosition min, ItemPosition position) =>
-        position.itemTrailingEdge < min.itemTrailingEdge
-            ? position
-            : min)
-            .index;
-        int max = itemPositionListener.itemPositions.value
-            .where((ItemPosition position) => position.itemLeadingEdge < 1)
-            .reduce((ItemPosition max, ItemPosition position) =>
-        position.itemLeadingEdge > max.itemLeadingEdge
-            ? position
-            : max)
-            .index;
+      await Future.delayed(Duration(milliseconds: 500));
+      int min = itemPositionListener.itemPositions.value.where((ItemPosition position) => position.itemTrailingEdge > 0)
+          .reduce((ItemPosition min, ItemPosition position) =>
+      position.itemTrailingEdge < min.itemTrailingEdge
+          ? position
+          : min)
+          .index;
+      int max = itemPositionListener.itemPositions.value
+          .where((ItemPosition position) => position.itemLeadingEdge < 1)
+          .reduce((ItemPosition max, ItemPosition position) =>
+      position.itemLeadingEdge > max.itemLeadingEdge
+          ? position
+          : max)
+          .index;
 
-        int currentIndex = ((min + max)/2).floor().toInt();
+      int currentIndex = min == 0
+          ? 0
+          : max == widget.pages.length-1
+            ? widget.pages.length-1
+            : min;
 
-        if(selectedBarIndex != currentIndex) {
-          _tabController.animateTo(currentIndex);
-          setState(() {
-            selectedBarIndex = currentIndex;
-          });
-        }
+      if(selectedBarIndex != currentIndex) {
+        _tabController.animateTo(currentIndex);
+        setState(() {
+          selectedBarIndex = currentIndex;
+        });
+      }
+
+      html.window.history.pushState("", widget.titles[currentIndex], currentIndex == 0 ? '/' : "/#/${widget.paths[currentIndex].toLowerCase()}");
     });
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(Duration(seconds: 1));
-      itemScrollController.scrollTo(index: widget.initialPage, duration: Duration(milliseconds: 200), curve: Curves.easeOut);
+      await Future.delayed(Duration(milliseconds: 500));
+      itemScrollController.scrollTo(index: widget.initialPage, duration: Duration(milliseconds: 500), curve: Curves.easeInOutQuint);
     });
   }
 
@@ -119,11 +132,9 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    setState(() => _screenSize = screenWidth(context: context));
-
     return OrientationBuilder(
       builder: (context, orientation) {
-        return _buildPage(orientation == Orientation.portrait || _screenSize <= 600);
+        return _buildPage(orientation == Orientation.portrait || screenWidth(context: context) <= 600);
       },
     );
   }
@@ -143,15 +154,34 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       onTap: (index) {
         setState(() {
           selectedBarIndex = index;
-          itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 500), curve: Curves.easeInOutQuint);
         });
+        itemScrollController.scrollTo(index: index, duration: Duration(milliseconds: 500), curve: Curves.easeInOutQuint);
       },
     );
   }
 
-  _buildList() => ScrollablePositionedList.builder(
+  _buildList(bool isPortrait) => ScrollablePositionedList.builder(
     itemCount: widget.pages.length,
-    itemBuilder: (context, index) => widget.pages[index],
+    itemBuilder: (context, index) => index == 0 ? widget.pages[index] : Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 800,
+            padding: EdgeInsets.only(
+              top: 24.0,
+              left: 8.0,
+              right: 8.0
+            ),
+            child: _buildTitle(
+                isPortrait: isPortrait,
+                title: widget.titles[index],
+                alignment: index % 2 == 1 ? Alignment.topLeft : Alignment.topRight
+            ),
+          ),
+          widget.pages[index],
+        ],
+      ),
+    ),
     itemScrollController: itemScrollController,
     itemPositionsListener: itemPositionListener,
   );
@@ -173,7 +203,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       body: Stack(
         children: <Widget>[
           Container(
-            child: _buildList()
+            child: _buildList(isPortrait)
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -187,83 +217,15 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
     );
   }
 
-  _buildHorizontalLayout() {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            child: _buildList()
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: widget.titles.length * 100.0,
-              child: _buildTabBar(),
-            ),
-          ),
-        ],
+  _buildTitle({bool isPortrait, String title, Alignment alignment}) => Align(
+    alignment: alignment,
+    child: RichText(
+      text: TextSpan(
+        text: title,
+        style: Theme.of(context).textTheme.title.copyWith(
+            fontSize: isPortrait ? 46 : 56
+        ),
       ),
-      /*Stack(
-          children: <Widget>[
-            Container(
-              child: ScrollablePositionedList.builder(
-                itemCount: widget.pages.length,
-                itemBuilder: (context, index) => Container(child: widget.pages[index], height: screenHeight(context: context)),
-                itemScrollController: itemScrollController,
-                itemPositionsListener: itemPositionListener
-              ),
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                width: 400,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: 100,
-                      width: 100,
-                      child: FlatButton(
-                        onPressed: () => itemScrollController.scrollTo(index: 2, duration: Duration(milliseconds: 250)),
-                        child: Image.asset(
-                          'images/logo.png',
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    _buildTabBar(currentIndex)
-                  ],
-                ),
-              ),
-            ),
-          ],
-        )*/
-      /*Stack(
-          children: <Widget>[
-            Container(
-              child: widget.pages[selectedBarIndex],
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                  width: 400 + _screenSize/16,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60)),
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 40.0,
-                      right: _screenSize/16,
-                      top: 8.0,
-                      bottom: 8.0,
-                    ),
-                    child: _buildTabBar(selectedBarIndex),
-                  ),
-              ),
-            ),
-          ],
-        )*/
-    );
-  }
+    ),
+  );
 }

@@ -3,16 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 
 import 'package:flutter_web_test/utils/functions.dart';
 import 'package:flutter_web_test/utils/list_animation.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
-
-import 'dart:html' as html;
-
-import 'home.dart';
 
 class AboutPage extends StatefulWidget {
 
@@ -102,14 +99,15 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
 
   _buildVerticalLayout() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 24.0
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            _buildTitle(true),
-            _buildContactInfo(),
             _buildAboutInfo(),
-            buildIconBar(),
           ],
         ),
       ),
@@ -119,32 +117,20 @@ class _AboutPageState extends State<AboutPage> with SingleTickerProviderStateMix
   _buildHorizontalLayout() {
     return Align(
       child: Container(
+        padding: EdgeInsets.only(
+            left: 8.0,
+            right: 8.0,
+            bottom: 24.0
+        ),
         width: 800,
         child: Column(
           children: <Widget>[
-            Container(height: 56.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: _buildTitle(false),
-            ),
-            Container(height: 8.0),
             _buildAboutInfo(),
           ],
         ),
       ),
     );
   }
-  _buildTitle(bool isPortrait) => Container(
-    child: RichText(
-      text: TextSpan(
-        text: "About Me",
-        style: Theme.of(context).textTheme.title.copyWith(
-            fontSize: isPortrait ? 46 : 56
-        ),
-      ),
-    ),
-  );
-
 
   _buildContactInfo() {
     return Column(
