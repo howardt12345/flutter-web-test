@@ -239,7 +239,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
                     _first = false;
                   });
                   //itemScrollController.jumpTo(index: _currentPagePic);
-                  _scrollController.jumpTo((_currentPagePic) * thumbnailSize + (screenWidth(context: context) >= 900 ? (900 % width)/2 : (900 % screenWidth(context: context))/2));
+                  _scrollController.jumpTo((_currentPagePic) * thumbnailSize + (screenWidth(context: context) >= 900 ? (900 % width)/2 : (900 - screenWidth(context: context))/2));
                 },
               ),
             ),
