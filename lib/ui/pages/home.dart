@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     bool isPortrait = (/*orientation == Orientation.portrait || */screenWidth(context: context) <= 600);
     return OrientationBuilder(
       builder: (context, orientation) => Container(
-        height: screenHeight(context: context)*2/3,
+        height: screenHeight(context: context)*3/4,
         width: screenWidth(context: context),
         child: Stack(
           children: <Widget>[
@@ -62,8 +62,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/Nature%2FLandscapes%2F(Canon%20EOS%2077D)%202019_10_15%2007_18_05-Edited%20(Web)_.jpg?alt=media&token=73c5f2d7-8409-4563-a46e-be2e22d28f67",
                   fit: BoxFit.cover,
                   width: screenWidth(context: context),
+                  height: screenHeight(context: context)*3/4,
                 ),
-                mainAxisExtent: screenHeight(context: context)*2/3,
+                mainAxisExtent: screenHeight(context: context)*3/4,
               ),
             ),
             Center(

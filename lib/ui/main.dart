@@ -145,7 +145,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin {
       labelColor: Color.fromRGBO(255 - color.red, 255 - color.green, 255 - color.blue, color.opacity),
       unselectedLabelColor: color,
       indicator: BubbleTabIndicator(
-        indicatorHeight: 25.0,
+        indicatorHeight: 32.0,
         indicatorColor: color.withOpacity(0.75),
         tabBarIndicatorSize: TabBarIndicatorSize.tab,
       ),
