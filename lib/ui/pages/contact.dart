@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:easy_google_maps/easy_google_maps.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_web_test/ui/components/image_manager.dart';
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/utils/functions.dart';
+
+import 'package:easy_google_maps/easy_google_maps.dart';
+import 'package:firebase/firebase.dart';
+import 'package:firebase/firestore.dart' as fs;
 
 import 'package:http/http.dart' as http;
 
@@ -15,13 +20,40 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autovalidate = false;
+
+  final TextEditingController _nameController = new TextEditingController();
+  final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _subjectController = new TextEditingController();
+  final TextEditingController _bodyController = new TextEditingController();
+
+  FocusNode _focusNodeName = new FocusNode();
+  FocusNode _focusNodeEmail = new FocusNode();
+  FocusNode _focusNodeSubject = new FocusNode();
+  FocusNode _focusNodeBody = new FocusNode();
+
+  bool _autovalidate = false, _formWasEdited = false, _submitted = false;
 
   double _screenSize = 0;
 
-  String name, email, subject, body;
-
   Map<String, String> contact = Map<String, String>();
+
+
+  void initState() {
+    super.initState();
+  }
+
+  void dispose() {
+    super.dispose();
+    _focusNodeName.dispose();
+    _focusNodeEmail.dispose();
+    _focusNodeSubject.dispose();
+    _focusNodeBody.dispose();
+
+    _nameController.dispose();
+    _emailController.dispose();
+    _subjectController.dispose();
+    _bodyController.dispose();
+  }
 
   Future<void> _getContact(String url) async {
     var response = await http.get(url);
@@ -66,18 +98,6 @@ class _ContactPageState extends State<ContactPage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(),
-            Form(
-              key: _formKey,
-              autovalidate: _autovalidate,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    _buildContactInfo(),
-                  ],
-                ),
-              ),
-            ),
             buildCopyrightText(),
           ],
         ),
@@ -99,11 +119,18 @@ class _ContactPageState extends State<ContactPage> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          buildIconBar(hover: false),
-                        ],
+                      child: Container(
+                        width: 400,
+                        height: 500,
+                        child: Column(
+                          children: <Widget>[
+                            _buildContactForm(),
+                          ],
+                        ),
                       ),
+                    ),
+                    Container(
+                      width: 16.0,
                     ),
                     Expanded(
                       child: Column(
@@ -122,6 +149,7 @@ class _ContactPageState extends State<ContactPage> {
                               title: 'Location',
                             ),
                           ),
+                          buildIconBar(hover: false),
                         ],
                       ),
                     ),
@@ -168,5 +196,171 @@ class _ContactPageState extends State<ContactPage> {
           )
       ).toList(),
     );
+  }
+
+  _buildContactForm() {
+    return Form(
+      key: _formKey,
+      autovalidate: _autovalidate,
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              keyboardType: TextInputType.text,
+              focusNode: _focusNodeName,
+              controller: _nameController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Name *',
+              ),
+              maxLines: 1,
+              validator: _validateName,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).requestFocus(_focusNodeEmail);
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              focusNode: _focusNodeEmail,
+              controller: _emailController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email *',
+              ),
+              maxLines: 1,
+              validator: _validateEmail,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).requestFocus(_focusNodeSubject);
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              keyboardType: TextInputType.text,
+              focusNode: _focusNodeSubject,
+              controller: _subjectController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Subject *',
+              ),
+              maxLines: 1,
+              validator: _validateSubject,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).requestFocus(_focusNodeBody);
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              keyboardType: TextInputType.multiline,
+              focusNode: _focusNodeBody,
+              controller: _bodyController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Body *',
+              ),
+              maxLines: 5,
+              validator: _validateBody,
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              '* indicates required field',
+              style: Theme.of(context).textTheme.caption,
+            ),
+            SizedBox(height: 8.0),
+            Center(
+              child: !_submitted ? RaisedButton(
+                elevation: 0.0,
+                child: const Text('SUBMIT'),
+                onPressed: _handleSubmitted,
+              ) : ListTile(
+                title: Text("Thanks for submitting!"),
+                trailing: FlatButton(
+                  child: Text("OK"),
+                  onPressed: () => setState(() => _submitted = false),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _handleSubmitted() {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) {
+      _autovalidate = true;
+    } else {
+      form.save();
+      var name = _nameController.text.trim();
+      var email = _emailController.text.trim();
+      var subject = _subjectController.text;
+      var body = _bodyController.text;
+
+      fs.Firestore store = firestore();
+      fs.CollectionReference ref = store.collection("messages");
+      ref.doc(randomString(20)).set({
+        'name': name,
+        'email': email,
+        'subject': subject,
+        'body': body,
+        'date': DateTime.now(),
+      }).catchError((e) => print(e));
+
+      _nameController.clear();
+      _emailController.clear();
+      _subjectController.clear();
+      _bodyController.clear();
+
+      setState(() {
+        _submitted = true;
+      });
+    }
+  }
+
+  String _validateName(String value) {
+    _formWasEdited = true;
+    if (value.isEmpty)
+      return 'Name is required.';
+    return null;
+  }
+
+  String _validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Email is invalid.';
+    else
+      return null;
+  }
+
+  String _validateSubject(String value) {
+    _formWasEdited = true;
+    if (value.isEmpty)
+      return 'Subject is required.';
+    return null;
+  }
+
+  String _validateBody(String value) {
+    _formWasEdited = true;
+    if (value.isEmpty)
+      return 'Body is required.';
+    return null;
+  }
+
+  String randomString(int length) {
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    Random rnd = new Random(new DateTime.now().millisecondsSinceEpoch);
+    String result = "";
+    for (var i = 0; i < length; i++) {
+      result += chars[rnd.nextInt(chars.length)];
+    }
+    return result;
   }
 }

@@ -244,7 +244,10 @@ buildCopyrightText() => Column(
         ),
       ),
     ),
-    Text("© 2019 Howard Tseng, All rights reserved."),
+    Text(
+      "© 2019 Howard Tseng, All rights reserved.\nWebsite made with Flutter for Web.",
+      textAlign: TextAlign.center,
+    ),
     Container(height: 8.0,)
   ],
 );
