@@ -23,11 +23,13 @@ dependencies:
   bubble_tab_indicator: any
   easy_google_maps: any
   expandable_card: any
+  firebase: any
   flutter_parallax: any
   flutter_scroll_gallery: any
   flutter_sidekick: any
   flutter_staggered_grid_view: any
   http: any
+  icons_helper: any
   mailer: any
   photo_view: any
   transparent_image: any

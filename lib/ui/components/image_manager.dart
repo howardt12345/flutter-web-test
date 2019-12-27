@@ -1,9 +1,12 @@
 
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:firebase/firebase.dart';
+import 'package:firebase/firestore.dart' as fs;
 
 Map<String, IconData> iconMapping = {
   'buy': Icons.add_shopping_cart,
@@ -60,7 +63,7 @@ class PictureManager {
       } else {
         List<dynamic> images = category['images'];
         images.forEach((image) {
-          print(image);
+          //print(image);
           subTmp['icon'].add(Picture.fromJson(image, '$categoryName'));
         });
         subTmp['icon'].sort((a,b) => b.time.compareTo(a.time));
@@ -68,6 +71,68 @@ class PictureManager {
 
       tmpMenu[categoryName] = subTmp;
     }
+    return PictureManager(
+      url: url,
+      token: token,
+      menu: tmpMenu,
+    );
+  }
+
+  static Future<PictureManager> fromFirestore({String url, String token}) async {
+    Map<String, Map<String, List<Picture>>> tmpMenu = Map<String, Map<String, List<Picture>>>();
+
+    fs.Firestore store = firestore();
+    var categories = await store.collection("photos").get().catchError((error) => print(error));
+
+    for(var cat in categories.docs) {
+      var category = cat.data();
+
+      String categoryName = category['category'];
+      String iconName = category['icon'];
+      var subcategories = category['subcategories'];
+
+      Map<String, List<Picture>> subTmp = Map<String, List<Picture>>();
+      subTmp['icon'] = [Picture(title: iconName, time: DateTime.now())];
+
+      if(subcategories.length != 0) {
+        for(var sc in subcategories) {
+          var subcat = await cat.ref.collection(sc).get().catchError((error) => print(error));
+          var images = subcat.docs;
+
+          String subcategoryName = sc;
+          List<Picture> pictures = [];
+
+          images.forEach((image) {
+            try{
+              print(image.data());
+              pictures.add(Picture.fromJson(image.data(), '$categoryName/$subcategoryName'));
+            } catch(e) {
+              print(e);
+            }
+          });
+
+          pictures.sort((a,b) => b.time.compareTo(a.time));
+          subTmp[subcategoryName] = pictures;
+          subTmp['icon'].addAll(pictures);
+        }
+      } else {
+        var snapshot = await cat.ref.collection('images').get().catchError((error) => print(error));
+        var images = snapshot.docs;
+
+        images.forEach((image) {
+          try{
+            print(image.data());
+            subTmp['icon'].add(Picture.fromJson(image.data(), '$categoryName'));
+          } catch(e) {
+            print(e);
+          }
+        });
+        subTmp['icon'].sort((a,b) => b.time.compareTo(a.time));
+      }
+
+      tmpMenu[categoryName] = subTmp;
+    }
+
     return PictureManager(
       url: url,
       token: token,

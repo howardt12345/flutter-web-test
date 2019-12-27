@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-
-
 import 'package:flutter_web_test/ui/components/drawer_stack.dart';
 import 'package:flutter_web_test/ui/components/icon_bar.dart';
 import 'package:flutter_web_test/ui/components/image_manager.dart';
@@ -11,8 +9,8 @@ import 'package:flutter_web_test/ui/components/scrollable_positioned_list/scroll
 
 import 'package:flutter_web_test/utils/functions.dart';
 
-import 'package:flutter_sidekick/flutter_sidekick.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:icons_helper/icons_helper.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class PortfolioPage extends StatefulWidget {
@@ -35,11 +33,11 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
 
   PictureManager manager;
 
-  int _index = 1, _subindex = 1, _currentPic = 1, _currentPagePic = 0;
+  int _index = 0, _subindex = 0, _currentPic = 1, _currentPagePic = 0;
 
   double _screenSize = 0;
 
-  bool _first = true;
+  bool _first = true, _loaded = false;
 
   @override
   void initState() {
@@ -47,7 +45,9 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
 
     super.initState();
     _initializeManager().then((_) {
-      setState(() {});
+      setState(() {
+        _loaded = true;
+      });
     });
   }
 
@@ -60,8 +60,8 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   }
 
   Future<void> _initializeManager() async {
-    manager = await PictureManager.fromUrl(
-      jsonUrl: "https://raw.githubusercontent.com/howardt12345/website/master/portfolio.json",
+    manager = await PictureManager.fromFirestore(
+      //jsonUrl: "https://raw.githubusercontent.com/howardt12345/website/master/portfolio.json",
       url: "https://firebasestorage.googleapis.com/v0/b/portfolio-49b69.appspot.com/o/",
       token: "810d1310-0533-4e13-bc33-6fc77ac56ef1",
     );
@@ -74,14 +74,36 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
       _screenSize = screenWidth(context: context);
       _scaffoldKey = new GlobalKey();
     });
-    return OrientationBuilder(
+    return _loaded
+        ? OrientationBuilder(
         builder: (context, orientation) => Container(
-        height: screenHeight(context: context),
-        width: screenWidth(context: context),
-        child: (/*orientation == Orientation.portrait || */_screenSize <= 950)
-            ? _buildVerticalLayout()
-            : _buildHorizontalLayout(),
+          height: screenHeight(context: context),
+          width: screenWidth(context: context),
+          child: (/*orientation == Orientation.portrait || */_screenSize <= 950)
+              ? _buildVerticalLayout()
+              : _buildHorizontalLayout(),
         )
+    ) : Center(
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Image.asset(
+              '/images/logo_dark.png',
+              width: 125,
+              height: 125,
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              width: 25,
+              height: 25,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -158,7 +180,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
           alignment: Alignment.centerLeft,
           child: Container(
             height: 56,
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: RichText(
               text: TextSpan(
                   children: [
@@ -282,10 +304,10 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
     if(_subindex == 0) {
       for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
         var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
-        print('${manager.url}'
+        /*print('${manager.url}'
             '${pic.path.replaceAll('/', '%2F')}%2F'
             '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-            '${manager.token}');
+            '${manager.token}');*/
         widgets.add(
           _ImageTile(
             pic: pic,
@@ -306,10 +328,10 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
     } else {
       for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
         var pic = manager.getPicturesFrom(_index, _subindex)[i];
-        print('${manager.url}'
+        /*print('${manager.url}'
             '${pic.path.replaceAll('/', '%2F')}%2F'
             '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-            '${manager.token}');
+            '${manager.token}');*/
         widgets.add(
             _ImageTile(
               pic: pic,
@@ -378,7 +400,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
                         _first = true;
                       });
                     },
-                    iconData: iconMapping[manager.getPictures(c, 'icon')[0].title],
+                    iconData: getIconGuessFavorMaterial(name: manager.getPictures(c, 'icon')[0].title),
                     color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   ),
                 );
@@ -403,7 +425,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
         child: AnimatedList(
           key: _listKey,
           shrinkWrap: true,
-          initialItemCount: manager.getCategories().length,
+          initialItemCount: manager.getCategories().length ?? 0,
           itemBuilder: (context, index, animation) => _buildItem(context, manager.getCategory(index), index, animation),
         ),
       ),
@@ -454,7 +476,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Icon(
-                  iconMapping[manager.getPictures(manager.getCategory(index), 'icon')[0].title],
+                  getIconGuessFavorMaterial(name: manager.getPictures(manager.getCategory(index), 'icon')[0].title),
                   color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -466,6 +488,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
             height: _index == index ? manager.getSubcategoriesFrom(_index).length * 36 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
+              mainAxisSize: MainAxisSize.min,
               children: manager.getSubcategoriesFrom(index).map((s) {
                 if(manager.getSubcategoriesFrom(index).indexOf(s) == 0) {
                   return _buildSubMenu(context, "All", 0);
