@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_web_test/ui/components/drawer_stack.dart';
 import 'package:flutter_web_test/ui/components/icon_bar.dart';
-import 'package:flutter_web_test/ui/components/image_manager.dart';
+import 'package:flutter_web_test/ui/components/picture_manager.dart';
 import 'package:flutter_web_test/ui/components/scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'package:flutter_web_test/utils/functions.dart';

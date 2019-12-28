@@ -168,15 +168,36 @@ class PictureManager {
 
   List<Picture> getAllPicturesAt(String category) {
     List<Picture> tmp = [];
-    menu[category].values.map((s) => tmp.addAll(s));
+    for(var i = 1; i < getPictures(category, 'icon').length; i++) {
+      tmp.add(getPictures(category, 'icon')[i]);
+    }
     tmp.sort((a,b) => b.time.compareTo(a.time));
     return tmp;
   }
+  List<String> getAllUrlsAt(String category) {
+    List<Picture> tmp = [];
+    for(var i = 1; i < getPictures(category, 'icon').length; i++) {
+      tmp.add(getPictures(category, 'icon')[i]);
+    }
+    tmp.sort((a,b) => b.time.compareTo(a.time));
+    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
+  }
   List<Picture> getAllPicturesFrom(int index) {
     List<Picture> tmp = [];
-    menu[menu.keys.toList()[index]].values.map((s) => tmp.addAll(s));
+    for(var i = 1; i < getPictures(getCategory(index), 'icon').length; i++) {
+      tmp.add(getPictures(getCategory(index), 'icon')[i]);
+    }
     tmp.sort((a,b) => b.time.compareTo(a.time));
+
     return tmp;
+  }
+  List<String> getAllUrlsFrom(int index) {
+    List<Picture> tmp = [];
+    for(var i = 1; i < getPictures(getCategory(index), 'icon').length; i++) {
+      tmp.add(getPictures(getCategory(index), 'icon')[i]);
+    }
+    tmp.sort((a,b) => b.time.compareTo(a.time));
+    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
   }
   List<Picture> getAllPictures() {
     List<Picture> tmp = [];

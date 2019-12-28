@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:expandable_card/expandable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_test/ui/components/icon_bar.dart';
-import 'package:flutter_web_test/ui/components/image_manager.dart';
+import 'package:flutter_web_test/ui/components/picture_manager.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

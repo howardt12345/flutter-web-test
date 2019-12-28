@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_web_test/ui/components/image_manager.dart';
+import 'package:flutter_web_test/ui/components/picture_manager.dart';
 import 'package:flutter_web_test/ui/pages/home.dart';
 import 'package:flutter_web_test/utils/functions.dart';
 
