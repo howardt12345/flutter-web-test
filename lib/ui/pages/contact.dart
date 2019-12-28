@@ -145,7 +145,7 @@ class _ContactPageState extends State<ContactPage> {
                             height: 350,
                             child: EasyGoogleMaps(
                               apiKey: 'AIzaSyCFHFzyeZZhepypQ_IypfDKiSxRLQA97GE',
-                              address: '240 Friel Street, Ottawa, Ontario',
+                              address: 'K1N 1H6, Ottawa, Ontario',
                               title: 'Location',
                             ),
                           ),
@@ -303,7 +303,7 @@ class _ContactPageState extends State<ContactPage> {
 
       fs.Firestore store = firestore();
       fs.CollectionReference ref = store.collection("messages");
-      ref.doc(randomString(20)).set({
+      ref.doc().set({
         'name': name,
         'email': email,
         'subject': subject,
