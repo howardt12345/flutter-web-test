@@ -82,7 +82,7 @@ class PictureManager {
     Map<String, Map<String, List<Picture>>> tmpMenu = Map<String, Map<String, List<Picture>>>();
 
     fs.Firestore store = firestore();
-    var categories = await store.collection("photos").get().catchError((error) => print(error));
+    var categories = await store.collection("photos").orderBy('category').get().catchError((error) => print(error));
 
     for(var cat in categories.docs) {
       var category = cat.data();
@@ -105,7 +105,9 @@ class PictureManager {
           images.forEach((image) {
             try{
               print(image.data());
-              pictures.add(Picture.fromJson(image.data(), '$categoryName/$subcategoryName'));
+              if(image.data()['title'] != 'null') {
+                pictures.add(Picture.fromJson(image.data(), '$categoryName/$subcategoryName'));
+              }
             } catch(e) {
               print(e);
             }
@@ -122,7 +124,9 @@ class PictureManager {
         images.forEach((image) {
           try{
             print(image.data());
-            subTmp['icon'].add(Picture.fromJson(image.data(), '$categoryName'));
+            if(image.data()['title'] != 'null') {
+              subTmp['icon'].add(Picture.fromJson(image.data(), '$categoryName'));
+            }
           } catch(e) {
             print(e);
           }

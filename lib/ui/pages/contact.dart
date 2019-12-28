@@ -124,6 +124,9 @@ class _ContactPageState extends State<ContactPage> {
                         height: 500,
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              height: 24.0,
+                            ),
                             _buildContactForm(),
                           ],
                         ),
