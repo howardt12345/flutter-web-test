@@ -95,6 +95,7 @@ class PictureManager {
       subTmp['icon'] = [Picture(title: iconName, time: DateTime.now())];
 
       if(subcategories.length != 0) {
+        subcategories.sort();
         for(var sc in subcategories) {
           var subcat = await cat.ref.collection(sc).get().catchError((error) => print(error));
           var images = subcat.docs;
