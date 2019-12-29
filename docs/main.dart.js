@@ -48443,7 +48443,7 @@ if(p.ch==c)u=K.V(a).y2.x.b
 else{u=K.V(a).y2.x.b
 u=P.an(153,(16711680&u.gk(u))>>>16,(65280&u.gk(u))>>>8,(255&u.gk(u))>>>0)}u=L.d2(b,o,o,o,o,n.y.CZ(u,16,C.F),C.cE)
 n=P.bb(0,300)
-t=p.ch==c?b.length*10:0
+t=p.ch==c?b.length*8:0
 s=N.a6
 r=[s]
 t=T.c0(H.f([new T.bn(o,8,o,o),u,new T.bn(o,8,o,o),G.a2X(o,K.V(a).y2.x.b,C.bC,n,2,t)],r),C.cT,C.P,C.L)

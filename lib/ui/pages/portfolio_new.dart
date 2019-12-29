@@ -463,7 +463,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
                       SizedBox(height: 8.0),
                       AnimatedContainer(
                         duration: Duration(milliseconds: 300),
-                        width: _index == index ? item.length * 10 : 0,
+                        width: _index == index ? item.length * 8 : 0,
                         height: 2.0,
                         color: Theme.of(context).textTheme.body2.color,
                         curve: Curves.ease,
