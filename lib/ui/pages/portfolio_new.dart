@@ -399,7 +399,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
                         _first = true;
                       });
                     },
-                    iconData: getIconGuessFavorMaterial(name: manager.getPictures(c, 'icon')[0].title),
+                    iconData: getIconGuessFavorMaterial(name: manager.getPictures(c, 'icon')[0].name),
                     color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   ),
                 );
@@ -475,7 +475,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Icon(
-                  getIconGuessFavorMaterial(name: manager.getPictures(manager.getCategory(index), 'icon')[0].title),
+                  getIconGuessFavorMaterial(name: manager.getPictures(manager.getCategory(index), 'icon')[0].name),
                   color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -572,14 +572,14 @@ class _ImageTile extends StatelessWidget {
             ),
             Center(
               child: Hero(
-                tag: '${pic.path}/${pic.title}-source',
+                tag: '${pic.path}/${pic.name}',
                 child: FadeInImage.memoryNetwork(
                   fit: BoxFit.cover,
                   height: thumbnail ? size : double.infinity,
                   width: thumbnail ? size : double.infinity,
                   alignment: Alignment.center,
                   placeholder: kTransparentImage,
-                  image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token',
+                  image: '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token',
                 ),
               ),
             ),
@@ -611,119 +611,116 @@ class __DetailCardState extends State<_DetailCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      child: Stack(
-        children: <Widget>[
-          Center(
-            child: AspectRatio(
-              aspectRatio: widget.pic.width/widget.pic.height,
-              child: Stack(
-                children: <Widget>[
-                  Center(
-                    child: Image.asset(
-                      '/images/logo_dark.png',
-                      width: 125,
-                      height: 125,
+      child: AspectRatio(
+        aspectRatio: widget.pic.width/widget.pic.height,
+        child: Stack(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Center(
+                  child: Image.asset(
+                    '/images/logo_dark.png',
+                    width: 125,
+                    height: 125,
+                  ),
+                ),
+                Center(
+                  child: SizedBox(
+                    width: 25,
+                    height: 25,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
                     ),
                   ),
-                  Center(
-                    child: SizedBox(
-                      width: 25,
-                      height: 25,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
-                      ),
-                    ),
+                ),
+                Center(
+                  child: FadeInImage.memoryNetwork(
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                      placeholder: kTransparentImage,
+                      image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
+                          .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
                   ),
-                  FadeInImage.memoryNetwork(
-                    fit: BoxFit.contain,
-                    alignment: Alignment.center,
-                    placeholder: kTransparentImage,
-                    image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title
-                        .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          AnimatedCrossFade(
+            AnimatedCrossFade(
               crossFadeState: info ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               duration: Duration(milliseconds: 250),
               firstChild: Container(),
               secondChild: Center(
-                child: AspectRatio(
-                  aspectRatio: widget.pic.width/widget.pic.height,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade200.withOpacity(0.5)
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            RichText(
-                              text: TextSpan(
-                                text: widget.pic.description,
-                                style: Theme.of(context).textTheme.body1.copyWith(
-                                  fontSize: 20,
-                                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200.withOpacity(0.5)
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              text: widget.pic.description,
+                              style: Theme.of(context).textTheme.body1.copyWith(
+                                fontSize: 20,
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 56.0,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 24,
-                    width: 24,
-                    child: widget.pic.download.isNotEmpty
-                        ? IconBarButton(
-                      url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.title
-                          .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
-                      iconData: iconMapping['download'],
-                    ) : null,
-                  ),
-                  Expanded(child: Container(),),
-                  Container(
-                    height: 24,
-                    width: 24,
-                    child: widget.pic.buy.isNotEmpty
-                        ? IconBarButton(
-                      url: widget.pic.buy,
-                      iconData: iconMapping['buy'],
-                    ) : null,
-                  ),
-                ],
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 56.0,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: 24,
+                      width: 24,
+                      child: widget.pic.download.isNotEmpty
+                          ? IconBarButton(
+                        url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
+                            .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                        iconData: iconMapping['download'],
+                      ) : null,
+                    ),
+                    Expanded(child: Container(),),
+                    Container(
+                      height: 24,
+                      width: 24,
+                      child: widget.pic.buy.isNotEmpty
+                          ? IconBarButton(
+                        url: widget.pic.buy,
+                        iconData: iconMapping['buy'],
+                      ) : null,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              height: 56,
-              width: 56,
-              child: IconBarButton(
-                iconData: Icons.info_outline,
-                onTap: () {
-                  setState(() {
-                    info = !info;
-                  });
-                },
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                height: 56,
+                width: 56,
+                child: IconBarButton(
+                  iconData: Icons.info_outline,
+                  onTap: () {
+                    setState(() {
+                      info = !info;
+                    });
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

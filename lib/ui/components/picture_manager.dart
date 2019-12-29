@@ -44,7 +44,7 @@ class PictureManager {
 
       Map<String, List<Picture>> subTmp = Map<String, List<Picture>>();
 
-      subTmp['icon'] = [Picture(title: iconName, time: DateTime.now())];
+      subTmp['icon'] = [Picture(name: iconName, time: DateTime.now())];
 
       if(category['subcategories'].length != 0) {
         List<dynamic> subcategories = category['subcategories'];
@@ -92,7 +92,7 @@ class PictureManager {
       var subcategories = category['subcategories'];
 
       Map<String, List<Picture>> subTmp = Map<String, List<Picture>>();
-      subTmp['icon'] = [Picture(title: iconName, time: DateTime.now())];
+      subTmp['icon'] = [Picture(name: iconName, time: DateTime.now())];
 
       if(subcategories.length != 0) {
         subcategories.sort();
@@ -106,7 +106,7 @@ class PictureManager {
           images.forEach((image) {
             try{
               print(image.data());
-              if(image.data()['title'] != 'null') {
+              if(image.data()['name'] != 'null') {
                 pictures.add(Picture.fromJson(image.data(), '$categoryName/$subcategoryName'));
               }
             } catch(e) {
@@ -125,7 +125,7 @@ class PictureManager {
         images.forEach((image) {
           try{
             print(image.data());
-            if(image.data()['title'] != 'null') {
+            if(image.data()['name'] != 'null') {
               subTmp['icon'].add(Picture.fromJson(image.data(), '$categoryName'));
             }
           } catch(e) {
@@ -185,7 +185,7 @@ class PictureManager {
       tmp.add(getPictures(category, 'icon')[i]);
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));
-    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
+    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
   }
   List<Picture> getAllPicturesFrom(int index) {
     List<Picture> tmp = [];
@@ -202,7 +202,7 @@ class PictureManager {
       tmp.add(getPictures(getCategory(index), 'icon')[i]);
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));
-    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.title.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
+    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
   }
   List<Picture> getAllPictures() {
     List<Picture> tmp = [];
@@ -217,13 +217,13 @@ class PictureManager {
 }
 
 class Picture {
-  final String title, path, description, buy, download;
-  final int width;
-  final double height;
+  final String name, path, description, buy, download, title;
+  final num width, height;
   final DateTime time;
 
   Picture({
     this.path,
+    this.name,
     this.title,
     this.width,
     this.height,
@@ -234,6 +234,7 @@ class Picture {
   });
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
+    name: json['name'],
     title: json['title'],
     width: json['w'],
     height: json['h'],
