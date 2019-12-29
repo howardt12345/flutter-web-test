@@ -235,11 +235,11 @@ class Picture {
 
   factory Picture.fromJson(Map<String, dynamic> json, String path) => Picture(
     title: json['title'],
-    width: json['width'],
-    height: json['height'],
-    description: json['description'],
+    width: json['w'],
+    height: json['h'],
+    description: json['desc'],
     buy: json['buy'],
-    download: json['download'],
+    download: json['dl'],
     time: json['time'] != '' ? DateTime.parse(json['time']) : DateTime.utc(1989, 11, 9),
     path: path,
   );
