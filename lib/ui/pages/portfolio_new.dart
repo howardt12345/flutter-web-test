@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_web_test/ui/components/drawer_stack.dart';
@@ -611,58 +613,91 @@ class __DetailCardState extends State<_DetailCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      child: AspectRatio(
-        aspectRatio: widget.pic.width/widget.pic.height,
-        child: Stack(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Center(
-                  child: Image.asset(
-                    '/images/logo_dark.png',
-                    width: 125,
-                    height: 125,
+      child: Stack(
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Center(
+                child: Image.asset(
+                  '/images/logo_dark.png',
+                  width: 125,
+                  height: 125,
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  width: 25,
+                  height: 25,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
                   ),
                 ),
-                Center(
-                  child: SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).textTheme.subtitle.color),
-                    ),
-                  ),
-                ),
-                Center(
+              ),
+              Center(
+                child: AspectRatio(
+                  aspectRatio: widget.pic.width/widget.pic.height,
                   child: FadeInImage.memoryNetwork(
-                      fit: BoxFit.contain,
-                      alignment: Alignment.center,
-                      placeholder: kTransparentImage,
-                      image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
-                          .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                    placeholder: kTransparentImage,
+                    image: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
+                        .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
                   ),
                 ),
-              ],
-            ),
-            AnimatedCrossFade(
-              crossFadeState: info ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-              duration: Duration(milliseconds: 250),
-              firstChild: Container(),
-              secondChild: Center(
-                child: BackdropFilter(
+              ),
+            ],
+          ),
+          Center(
+            child: AspectRatio(
+              aspectRatio: widget.pic.width/widget.pic.height,
+              child: AnimatedCrossFade(
+                crossFadeState: info ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                duration: Duration(milliseconds: 250),
+                firstChild: Container(),
+                secondChild: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
                   child: Container(
+                    constraints: BoxConstraints.expand(),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade200.withOpacity(0.5)
+                      color: Colors.white.withOpacity(0.5)
                     ),
                     child: SingleChildScrollView(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                              text: widget.pic.description,
-                              style: Theme.of(context).textTheme.body1.copyWith(
-                                fontSize: 20,
+                          Container(
+                              child: widget.pic.title != null ? RichText(
+                                text: TextSpan(
+                                  text: widget.pic.title,
+                                  style: Theme.of(context).textTheme.body1.copyWith(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ) : Container()
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(Icons.add_a_photo),
+                              RichText(
+                                text: TextSpan(
+                                  text: capitalize(formatDate(widget.pic.time, [M, ' ', d, ', ', yyyy, ' @ ', HH, ':', nn, ':', ss])),
+                                  style: Theme.of(context).textTheme.body1.copyWith(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(8.0),
+                            child: RichText(
+                              text: TextSpan(
+                                text: widget.pic.description,
+                                style: Theme.of(context).textTheme.body1.copyWith(
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                           )
@@ -673,54 +708,54 @@ class __DetailCardState extends State<_DetailCard> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 56.0,
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      height: 24,
-                      width: 24,
-                      child: widget.pic.download.isNotEmpty
-                          ? IconBarButton(
-                        url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
-                            .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
-                        iconData: iconMapping['download'],
-                      ) : null,
-                    ),
-                    Expanded(child: Container(),),
-                    Container(
-                      height: 24,
-                      width: 24,
-                      child: widget.pic.buy.isNotEmpty
-                          ? IconBarButton(
-                        url: widget.pic.buy,
-                        iconData: iconMapping['buy'],
-                      ) : null,
-                    ),
-                  ],
-                ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 56.0,
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: 24,
+                    width: 24,
+                    child: widget.pic.download.isNotEmpty
+                        ? IconBarButton(
+                      url: '${widget.url}${widget.pic.path.replaceAll('/', '%2F')}%2F${widget.pic.name
+                          .replaceAll(' ', '%20')}?alt=media&token=${widget.token}',
+                      iconData: iconMapping['download'],
+                    ) : null,
+                  ),
+                  Expanded(child: Container(),),
+                  Container(
+                    height: 24,
+                    width: 24,
+                    child: widget.pic.buy.isNotEmpty
+                        ? IconBarButton(
+                      url: widget.pic.buy,
+                      iconData: iconMapping['buy'],
+                    ) : null,
+                  ),
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                height: 56,
-                width: 56,
-                child: IconBarButton(
-                  iconData: Icons.info_outline,
-                  onTap: () {
-                    setState(() {
-                      info = !info;
-                    });
-                  },
-                ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              height: 56,
+              width: 56,
+              child: IconBarButton(
+                iconData: Icons.info_outline,
+                onTap: () {
+                  setState(() {
+                    info = !info;
+                  });
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

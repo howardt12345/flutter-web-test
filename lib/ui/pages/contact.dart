@@ -121,8 +121,8 @@ class _ContactPageState extends State<ContactPage> {
                     Expanded(
                       child: Container(
                         width: 400,
-                        height: 500,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Container(
                               height: 24.0,

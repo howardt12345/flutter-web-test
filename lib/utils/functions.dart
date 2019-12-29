@@ -32,3 +32,5 @@ openUrl(String url) async {
     html.window.open(url, '${Random.secure().nextInt(1000000000)}');
   }
 }
+
+String capitalize(String s) => s.length > 1 ? s[0].toUpperCase() + s.substring(1) : s.toUpperCase();

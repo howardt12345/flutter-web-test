@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
 
   bubble_tab_indicator: any
+  date_format: any
   easy_google_maps: any
   expandable_card: any
   firebase: any
