@@ -118,7 +118,9 @@ class PictureManager {
           subTmp[subcategoryName] = pictures;
           subTmp['icon'].addAll(pictures);
         }
-      } else {
+      }
+
+      try {
         var snapshot = await cat.ref.collection('images').get().catchError((error) => print(error));
         var images = snapshot.docs;
 
@@ -127,13 +129,22 @@ class PictureManager {
             print(image.data());
             if(image.data()['name'] != 'null') {
               subTmp['icon'].add(Picture.fromJson(image.data(), '$categoryName'));
+              if(subcategories.length != 0) {
+                try{
+                  subTmp['Miscellaneous'].add(Picture.fromJson(image.data(), '$categoryName'));
+                } catch(e) {
+                  subTmp['Miscellaneous'] = [Picture.fromJson(image.data(), '$categoryName')];
+                }
+              }
             }
           } catch(e) {
             print(e);
           }
         });
-        subTmp['icon'].sort((a,b) => b.time.compareTo(a.time));
+      } catch (e) {
+        print(e);
       }
+      subTmp['icon'].sort((a,b) => b.time.compareTo(a.time));
 
       tmpMenu[categoryName] = subTmp;
     }
@@ -164,51 +175,54 @@ class PictureManager {
   List<String> getCategories() => menu.keys.toList();
   String getCategory(int index) => menu.keys.toList()[index];
 
-  List<String> getSubcategories(String category) => menu[category].keys.toList();
+  List<String> getSubcategoriesAt(String category) => menu[category].keys.toList();
   List<String> getSubcategoriesFrom(int index) => menu[menu.keys.toList()[index]].keys.toList();
 
-  List<Picture> getPictures(String category, String subcategory) => menu[category][subcategory];
+  List<Picture> getPicturesAt(String category, String subcategory) => menu[category][subcategory];
   List<Picture> getPicturesFrom(int category, int subcategory)
     => menu[menu.keys.toList()[category]][menu[menu.keys.toList()[category]].keys.toList()[subcategory]];
 
   List<Picture> getAllPicturesAt(String category) {
     List<Picture> tmp = [];
-    for(var i = 1; i < getPictures(category, 'icon').length; i++) {
-      tmp.add(getPictures(category, 'icon')[i]);
+    for(var i = 1; i < getPicturesAt(category, 'icon').length; i++) {
+      tmp.add(getPicturesAt(category, 'icon')[i]);
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));
     return tmp;
   }
-  List<String> getAllUrlsAt(String category) {
-    List<Picture> tmp = [];
-    for(var i = 1; i < getPictures(category, 'icon').length; i++) {
-      tmp.add(getPictures(category, 'icon')[i]);
-    }
-    tmp.sort((a,b) => b.time.compareTo(a.time));
-    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
-  }
   List<Picture> getAllPicturesFrom(int index) {
     List<Picture> tmp = [];
-    for(var i = 1; i < getPictures(getCategory(index), 'icon').length; i++) {
-      tmp.add(getPictures(getCategory(index), 'icon')[i]);
+    for(var i = 1; i < getPicturesAt(getCategory(index), 'icon').length; i++) {
+      tmp.add(getPicturesAt(getCategory(index), 'icon')[i]);
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));
 
     return tmp;
   }
-  List<String> getAllUrlsFrom(int index) {
+
+  List<String> getAllUrlsAt(String category) {
     List<Picture> tmp = [];
-    for(var i = 1; i < getPictures(getCategory(index), 'icon').length; i++) {
-      tmp.add(getPictures(getCategory(index), 'icon')[i]);
+    for(var i = 1; i < getPicturesAt(category, 'icon').length; i++) {
+      tmp.add(getPicturesAt(category, 'icon')[i]);
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));
     return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
   }
+  List<String> getAllUrlsFrom(int index) {
+    List<Picture> tmp = [];
+    for(var i = 1; i < getPicturesAt(getCategory(index), 'icon').length; i++) {
+      tmp.add(getPicturesAt(getCategory(index), 'icon')[i]);
+    }
+    tmp.sort((a,b) => b.time.compareTo(a.time));
+    return tmp.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
+  }
+  List<String> getUrlsFor(List<Picture> pictures) => pictures.map((pic) => '$url${pic.path.replaceAll('/', '%2F')}%2F${pic.name.replaceAll(' ', '%20')}?alt=media&token=$token').toList();
+
   List<Picture> getAllPictures() {
     List<Picture> tmp = [];
     for(var h = 0; h < menu.keys.toList().length; h++) {
-      for(var i = 1; i < getPictures(getCategory(h), 'icon').length; i++) {
-        tmp.add(getPictures(getCategory(h), 'icon')[i]);
+      for(var i = 1; i < getPicturesAt(getCategory(h), 'icon').length; i++) {
+        tmp.add(getPicturesAt(getCategory(h), 'icon')[i]);
       }
     }
     tmp.sort((a,b) => b.time.compareTo(a.time));

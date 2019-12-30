@@ -303,12 +303,9 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   List<Widget> _getWidgets(bool thumbnail, {double size}) {
     List<Widget> widgets = [];
     if(_subindex == 0) {
-      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
-        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
-        /*print('${manager.url}'
-            '${pic.path.replaceAll('/', '%2F')}%2F'
-            '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-            '${manager.token}');*/
+      var pictures = manager.getPicturesAt(manager.getCategory(_index), 'icon');
+      for(var i = 1; i < pictures.length; i++) {
+        var pic = pictures[i];
         widgets.add(
           _ImageTile(
             pic: pic,
@@ -327,12 +324,9 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
         );
       }
     } else {
-      for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
-        var pic = manager.getPicturesFrom(_index, _subindex)[i];
-        /*print('${manager.url}'
-            '${pic.path.replaceAll('/', '%2F')}%2F'
-            '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
-            '${manager.token}');*/
+      var pictures = manager.getPicturesFrom(_index, _subindex);
+      for(var i = 0; i < pictures.length; i++) {
+        var pic = pictures[i];
         widgets.add(
             _ImageTile(
               pic: pic,
@@ -357,8 +351,9 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   List<StaggeredTile> _getTiles() {
     List<StaggeredTile> tiles = [];
     if(_subindex == 0) {
-      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
-        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
+      var pictures = manager.getPicturesAt(manager.getCategory(_index), 'icon');
+      for(var i = 1; i < pictures.length; i++) {
+        var pic = pictures[i];
         tiles.add(
           StaggeredTile.count(
             pic.height.toInt(),
@@ -367,8 +362,9 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
         );
       }
     } else {
-      for(var i = 0; i < manager.getPicturesFrom(_index, _subindex).length; i++) {
-        var pic = manager.getPicturesFrom(_index, _subindex)[i];
+      var pictures = manager.getPicturesFrom(_index, _subindex);
+      for(var i = 0; i < pictures.length; i++) {
+        var pic = pictures[i];
         tiles.add(
           StaggeredTile.count(
             pic.height.toInt(),
@@ -401,7 +397,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
                         _first = true;
                       });
                     },
-                    iconData: getIconGuessFavorMaterial(name: manager.getPictures(c, 'icon')[0].name),
+                    iconData: getIconGuessFavorMaterial(name: manager.getPicturesAt(c, 'icon')[0].name),
                     color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   ),
                 );
@@ -434,6 +430,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
   }
 
   Widget _buildItem(BuildContext context, String item, int index, Animation animation) {
+    var subcategories = manager.getSubcategoriesFrom(index);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -477,7 +474,7 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Icon(
-                  getIconGuessFavorMaterial(name: manager.getPictures(manager.getCategory(index), 'icon')[0].name),
+                  getIconGuessFavorMaterial(name: manager.getPicturesAt(manager.getCategory(index), 'icon')[0].name),
                   color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -486,16 +483,15 @@ class _PortfolioPageState extends State<PortfolioPage> with TickerProviderStateM
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
-            height: _index == index ? manager.getSubcategoriesFrom(_index).length * 36 : 0,
+            height: _index == index ? subcategories.length * 36 : 0,
             curve: Curves.ease,
             child: _index == index ? Column(
               mainAxisSize: MainAxisSize.min,
-              children: manager.getSubcategoriesFrom(index).map((s) {
-                if(manager.getSubcategoriesFrom(index).indexOf(s) == 0) {
+              children: subcategories.map((s) {
+                if(subcategories.indexOf(s) == 0) {
                   return _buildSubMenu(context, "All", 0);
                 } else {
-                  return _buildSubMenu(context, s,
-                      manager.getSubcategoriesFrom(index).indexOf(s));
+                  return _buildSubMenu(context, s, subcategories.indexOf(s));
                 }
               }).toList(),
             ) : null,

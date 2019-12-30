@@ -199,7 +199,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
                   });
                 },
                 icon: Icon(
-                  iconMapping[manager.getPictures(c, 'icon')[0].title],
+                  iconMapping[manager.getPicturesAt(c, 'icon')[0].title],
                   color: _index == manager.getCategories().indexOf(c) ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -275,7 +275,7 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Icon(
-                  iconMapping[manager.getPictures(manager.getCategory(index), 'icon')[0].title],
+                  iconMapping[manager.getPicturesAt(manager.getCategory(index), 'icon')[0].title],
                   color: _index == index ? Theme.of(context).textTheme.body2.color : Theme.of(context).textTheme.body2.color.withAlpha(153),
                   size: 24,
                 ),
@@ -331,8 +331,8 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   List<Widget> _getWidgets() {
     List<Widget> widgets = [];
     if(_subindex == 0) {
-      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
-        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
+      for(var i = 1; i < manager.getPicturesAt(manager.getCategory(_index), 'icon').length; i++) {
+        var pic = manager.getPicturesAt(manager.getCategory(_index), 'icon')[i];
         print('${manager.url}'
             '${pic.path.replaceAll('/', '%2F')}%2F'
             '${pic.title.replaceAll(' ', '%20')}?alt=media&token='
@@ -367,8 +367,8 @@ class _PortfolioPageState extends State<PortfolioPage> with SingleTickerProvider
   List<StaggeredTile> _getTiles() {
     List<StaggeredTile> tiles = [];
     if(_subindex == 0) {
-      for(var i = 1; i < manager.getPictures(manager.getCategory(_index), 'icon').length; i++) {
-        var pic = manager.getPictures(manager.getCategory(_index), 'icon')[i];
+      for(var i = 1; i < manager.getPicturesAt(manager.getCategory(_index), 'icon').length; i++) {
+        var pic = manager.getPicturesAt(manager.getCategory(_index), 'icon')[i];
         tiles.add(
             StaggeredTile.count(
                 pic.width,
