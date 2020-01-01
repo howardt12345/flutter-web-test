@@ -675,7 +675,13 @@ class __DetailCardState extends State<_DetailCard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              Icon(Icons.add_a_photo),
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.add_a_photo,
+                                  size: 12.0,
+                                ),
+                              ),
                               RichText(
                                 text: TextSpan(
                                   text: capitalize(formatDate(widget.pic.time, [M, ' ', d, ', ', yyyy, ' @ ', HH, ':', nn, ':', ss])),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -311,7 +310,8 @@ class _ContactPageState extends State<ContactPage> {
         'email': email,
         'subject': subject,
         'body': body,
-        'date': DateTime.now(),
+        'date': DateTime.now().toString(),
+        'replied': false
       }).catchError((e) => print(e));
 
       _nameController.clear();
@@ -354,16 +354,5 @@ class _ContactPageState extends State<ContactPage> {
     if (value.isEmpty)
       return 'Body is required.';
     return null;
-  }
-
-  String randomString(int length) {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-    Random rnd = new Random(new DateTime.now().millisecondsSinceEpoch);
-    String result = "";
-    for (var i = 0; i < length; i++) {
-      result += chars[rnd.nextInt(chars.length)];
-    }
-    return result;
   }
 }
