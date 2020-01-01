@@ -97,6 +97,21 @@ class _ContactPageState extends State<ContactPage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            _buildContactForm(),
+            Align(
+              alignment: Alignment.centerRight,
+              child: _buildContactInfo(),
+            ),
+            Container(height: 12.0,),
+            Container(
+              height: 350,
+              child: EasyGoogleMaps(
+                apiKey: 'AIzaSyCFHFzyeZZhepypQ_IypfDKiSxRLQA97GE',
+                address: '240 Friel Street, Ottawa, Ontario',
+                title: 'Location',
+              ),
+            ),
+            buildIconBar(hover: false),
             buildCopyrightText(),
           ],
         ),
@@ -311,7 +326,8 @@ class _ContactPageState extends State<ContactPage> {
         'subject': subject,
         'body': body,
         'date': DateTime.now().toString(),
-        'replied': false
+        'replied': false,
+        'archived': false,
       }).catchError((e) => print(e));
 
       _nameController.clear();
