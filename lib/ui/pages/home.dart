@@ -95,10 +95,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ],
               ),
             ),
-            Align(
+            /*Align(
               alignment: Alignment.topLeft,
               child: Text("${screenWidth(context: context)} x ${screenHeight(context: context)} ${isPortrait ? "Vertical" : "Horizontal"}"),
-            ),
+            ),*/
           ],
         ),
       ),
