@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   )*/;
   _buildSubtitle(bool isPortrait) => RichText(
     text: TextSpan(
-      text: "An Engineer, Flutter Developer, and Photographer",
+      text: "A Flutter Developer, and Photographer",
       style: Theme.of(context).textTheme.title.copyWith(
           fontSize: isPortrait ? 14 : 18
       ),
