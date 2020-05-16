@@ -13,3 +13,7 @@
     <img src="https://api.netlify.com/api/v1/badges/6b692f74-bfc4-45d5-a416-68a594d31c36/deploy-status" alt="Netlify Status" />
   </a>
 </p>
+
+## Getting Started
+
+Refer to this link: https://flutter.dev/docs/get-started/web
