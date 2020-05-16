@@ -6,7 +6,7 @@
 </h1>
 </h1>
 <p align="center">
-  The first iteration of <a href="https://howardt12345.com" target="_blank">howardt12345.com</a>, built with <a href="https://flutter.dev/" target="_blank">Flutter for web </a> and currently hosted with <a href="https://www.netlify.com/" target="_blank">Netlify</a> at 
+  The first iteration of <a href="https://howardt12345.com" target="_blank">howardt12345.com</a>, built with <a href="https://flutter.dev/" target="_blank">Flutter for web </a> and hosted with <a href="https://www.netlify.com/" target="_blank">Netlify</a>
 </p>
 <p align="center">
   <a href="https://app.netlify.com/sites/howardt12345-v1/deploys" target="_blank">
