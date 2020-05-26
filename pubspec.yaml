@@ -96,4 +96,4 @@ flutter:
         - asset: fonts/Roboto-Regular.ttf
     - family:  CustomIcons
       fonts:
-       - asset: fonts/CustomIcons.ttf
+        - asset: fonts/CustomIcons.ttf

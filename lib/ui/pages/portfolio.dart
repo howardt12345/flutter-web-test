@@ -490,7 +490,7 @@ class __DetailScreenState extends State<_DetailScreen> {
                     maxScale: PhotoViewComputedScale.covered * 2.0,
                     minScale: PhotoViewComputedScale.contained,
                     initialScale: PhotoViewComputedScale.contained,
-                    heroAttributes: PhotoViewHeroAttributes(tag: '${widget.pic.path}/${widget.pic.title}'),
+                    heroTag: '${widget.pic.path}/${widget.pic.title}',
                   ),
                 ),
               ],
